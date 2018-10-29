@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sahayatri!</string>
+    <string name="hint_username">Phone</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="label_vehicle_owner">Vehicle Owner</string>
+    <string name="label_passanger">Passanger</string>
+    <string name="label_login">Login</string>
+    <string name="label_password_reset">Password reset</string>
+    <string name="label_or">OR</string>
+    <string name="label_register_now">Don\'t have an account ? Register Now !</string>
+    <string name="label_button_register">Register</string>
+    <string name="label_birth_date">Birth date</string>
+    <string name="label_rf_heading">Register with Sahakari</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_passanger_dashboard">PassangerDashboardActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">John Doe</string>
+    <string name="nav_header_subtitle">example@domain.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="label_signin_helper">Log in to your account.</string>
+
+    <!-- ERROR MESSAGES -->
+    <string name="error_email">This doesn\'t look like an email address.</string>
+    <string name="error_phone">Are you sure this is your phone number ?</string>
+    <string name="error_password">Password must be at least 6 characters.</string>
+    <string name="error_name">Looks like this is not your name. example: John Niroula</string>
+    <string name="title_activity_owner_dashboard">OwnerDashboardActivity</string>
+</resources>

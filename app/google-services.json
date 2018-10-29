@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "928702554659",
+    "firebase_url": "https://tbc-shayatri.firebaseio.com",
+    "project_id": "tbc-shayatri",
+    "storage_bucket": "tbc-shayatri.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928702554659:android:cc2449ea52cdbb1e",
+        "android_client_info": {
+          "package_name": "np.com.naveenniraula.sahayatri"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928702554659-c20bc0110nje3mdb6sfv07jq17fk6lkr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "np.com.naveenniraula.sahayatri",
+            "certificate_hash": "25685aed34108fcac1fcd5960ad44594f7ce7990"
+          }
+        },
+        {
+          "client_id": "928702554659-bbg0jff8t420g5ql8tqeb224cbid60f0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh23fzcN_Mv0uTuXc1Y6MxuosZZwlJ42E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928702554659-bbg0jff8t420g5ql8tqeb224cbid60f0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

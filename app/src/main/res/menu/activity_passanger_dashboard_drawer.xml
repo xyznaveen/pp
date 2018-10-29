@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item android:title="Quick Actions">
+            <menu>
+                <item
+                    android:id="@+id/nav_action_dashboard"
+                    android:icon="@drawable/ic_dashboard"
+                    android:iconTint="@color/colorPrimaryDark"
+                    android:title="Dashboard" />
+                <item
+                    android:id="@+id/nav_action_profile"
+                    android:icon="@drawable/ic_users"
+                    android:iconTint="@color/colorPrimaryDark"
+                    android:title="Profile" />
+                <item
+                    android:icon="@drawable/ic_users"
+                    android:iconTint="@color/colorPrimaryDark"
+                    android:title="Schedules" />
+                <item
+                    android:icon="@drawable/ic_tickets"
+                    android:iconTint="@color/colorPrimaryDark"
+                    android:title="e-Ticket" />
+                <item
+                    android:icon="@drawable/ic_history"
+                    android:iconTint="@color/colorPrimaryDark"
+                    android:title="Transaction History" />
+            </menu>
+        </item>
+    </group>
+
+    <group>
+        <item
+            android:id="@+id/nav_action_logout"
+            android:icon="@drawable/ic_logout"
+            android:iconTint="@color/colorAccent"
+            android:title="Logout" />
+    </group>
+
+</menu>
