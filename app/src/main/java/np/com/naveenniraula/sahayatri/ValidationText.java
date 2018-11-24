@@ -1,12 +1,12 @@
 package np.com.naveenniraula.sahayatri;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import np.com.naveenniraula.rectify.Rectify;
-import np.com.naveenniraula.rectify.Validator;
 
 public class ValidationText extends AppCompatActivity {
 
@@ -22,21 +22,9 @@ public class ValidationText extends AppCompatActivity {
         TextInputLayout til3 = findViewById(R.id.tilLast);
 
         rectify = new Rectify();
-        rectify.add(new Rectify.ValidatorBuilder(this)
-                .setTextInputLayout(til)
-                .setRule(Validator.Rule.EMAIL)
-                .setErrorMessage(R.string.msg_invalid_email)
-                .build());
-        rectify.add(new Rectify.ValidatorBuilder(this)
-                .setTextInputLayout(til2)
-                .setRule(Validator.Rule.NOTEMPTY)
-                .setErrorMessage("This is actually awesome.")
-                .build());
-        rectify.add(new Rectify.ValidatorBuilder(this)
-                .setTextInputLayout(til3)
-                .setRule(Validator.Rule.PASSWORD)
-                .setErrorMessage(R.string.msg_invalid_password)
-                .build());
+        rectify.email(til);
+        rectify.basic(til2);
+        rectify.password(til3);
     }
 
     public void validate(View view) {

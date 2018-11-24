@@ -31,4 +31,10 @@
     <string name="title_activity_owner_dashboard">OwnerDashboardActivity</string>
     <string name="msg_invalid_password">Minimum 8 character is required.</string>
     <string name="msg_invalid_email">Valid email address is required.</string>
+    <string name="msg_error_required">flexible</string>
+    <string name="msg_email_required">Please enter a valid email.</string>
+    <string name="msg_password_invalid">Passwor must be at least 8 characters. And also must include letters, numbers and special characters.</string>
+
+    <!-- Rectify Validation Library Default Overrides -->
+    <!--<string name="rec_email_required"></string>-->
 </resources>
