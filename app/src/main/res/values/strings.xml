@@ -36,5 +36,10 @@
     <string name="msg_password_invalid">Passwor must be at least 8 characters. And also must include letters, numbers and special characters.</string>
 
     <!-- Rectify Validation Library Default Overrides -->
-    <!--<string name="rec_email_required"></string>-->
+    <string name="rec_error_required">This field is required.</string>
+    <string name="rec_decimal_required">Please enter a valid decimal number.</string>
+    <string name="rec_email_required">Invalid email address.</string>
+    <string name="rec_password_invalid">Password must be at least 8 characters in length. Must also include numbers,
+        letters and special characters.
+    </string>
 </resources>

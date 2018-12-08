@@ -6,7 +6,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import np.com.naveenniraula.rectify.Rectify;
+import np.com.naveenniraula.sahayatri.util.validation.Rectify;
 
 public class ValidationText extends AppCompatActivity {
 

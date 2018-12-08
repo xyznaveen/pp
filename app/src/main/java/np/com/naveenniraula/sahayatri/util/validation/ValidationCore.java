@@ -1,19 +1,17 @@
-package np.com.naveenniraula.rectify;
+package np.com.naveenniraula.sahayatri.util.validation;
 
 import android.util.Patterns;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import np.com.naveenniraula.rectify.Validator.Rule;
-
 public class ValidationCore {
 
     private static final int DEFAULT_PASSWORD_LENGTH = 8;
-    private Rule rule;
+    private Validator.Rule rule;
     private String value;
 
-    ValidationCore(Rule rule, String value) {
+    ValidationCore(Validator.Rule rule, String value) {
         this.rule = rule;
         this.value = value;
     }
@@ -38,11 +36,33 @@ public class ValidationCore {
 
                 return hasValidPassword(value);
             }
+            case DECIMAL: {
+
+                return hasValidDecimal(value);
+            }
             default: {
 
                 return false;
             }
         }
+    }
+
+    private boolean hasValidDecimal(String value) {
+
+        if (!isNotEmpty(value)) {
+
+            return false;
+        }
+
+        try {
+
+            Double.parseDouble(value);
+        } catch (NumberFormatException ignore) {
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
