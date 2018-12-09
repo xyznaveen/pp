@@ -43,7 +43,7 @@ public class PassangerDashboardActivity extends BaseActivity
         mAuth = FirebaseAuth.getInstance();
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            MiscUtil.snack(this, view, "This message will be shown.");
+            MiscUtil.snack(view, "This message will be shown.");
         });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

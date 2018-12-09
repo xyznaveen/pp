@@ -47,7 +47,7 @@
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:minLines="1"
-                android:text="naveen@gmail.com" />
+                android:text="naveen.niraula@outlook.com" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -66,7 +66,7 @@
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:minLines="1"
-                android:text="Password" />
+                android:text="morethan3ver" />
         </android.support.design.widget.TextInputLayout>
 
         <Button

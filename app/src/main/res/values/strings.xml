@@ -42,4 +42,6 @@
     <string name="rec_password_invalid">Password must be at least 8 characters in length. Must also include numbers,
         letters and special characters.
     </string>
+    <string name="title_owner_vehicles">My Vehicles</string>
+    <string name="subtitle_owner_vehicles">Manage the vechiles you own.</string>
 </resources>

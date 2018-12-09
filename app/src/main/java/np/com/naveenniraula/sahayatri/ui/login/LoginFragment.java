@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import np.com.naveenniraula.sahayatri.BaseFragment;
 import np.com.naveenniraula.sahayatri.R;
@@ -92,9 +91,13 @@ public class LoginFragment extends BaseFragment
                 ProgressBar progressBar = getView().findViewById(R.id.lfProgressBar);
                 progressBar.setVisibility(View.VISIBLE);
 
+                if (email == null && pwd == null) {
+                    return;
+                }
+
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.signInWithEmailAndPassword(Objects.requireNonNull(TextUtil.getText(email)),
-                        Objects.requireNonNull(TextUtil.getText(pwd))).addOnCompleteListener(task -> {
+                mAuth.signInWithEmailAndPassword(TextUtil.getText(email),
+                        TextUtil.getText(pwd)).addOnCompleteListener(task -> {
 
                     PreferenceUtil pf = new PreferenceUtil(getActivity());
                     pf.saveString(USER_TYPE, mViewModel.fetchString().getValue());
