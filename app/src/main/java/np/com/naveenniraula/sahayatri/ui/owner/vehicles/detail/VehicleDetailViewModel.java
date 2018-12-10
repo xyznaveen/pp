@@ -1,4 +1,4 @@
-package np.com.naveenniraula.sahayatri.ui.owner.vehicles;
+package np.com.naveenniraula.sahayatri.ui.owner.vehicles.detail;
 
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;

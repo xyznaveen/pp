@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import com.google.firebase.auth.FirebaseAuth;
 
 import np.com.naveenniraula.sahayatri.ui.login.LoginFragment;
-import np.com.naveenniraula.sahayatri.ui.passanger.PassangerDashboardActivity;
+import np.com.naveenniraula.sahayatri.ui.owner.OwnerDashboardActivity;
 
 public class WelcomeActivity extends BaseActivity {
 
@@ -28,8 +28,6 @@ public class WelcomeActivity extends BaseActivity {
                 toggleHomeAsUp(true);
             };
 
-    private FirebaseAuth mAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +36,7 @@ public class WelcomeActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.rfToolbar);
         setSupportActionBar(toolbar);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         if (getSupportActionBar() != null) {
 
@@ -50,7 +48,7 @@ public class WelcomeActivity extends BaseActivity {
         if (savedInstanceState == null) {
             if (mAuth.getCurrentUser() != null) {
 
-                new Thread(() -> startActivity(new Intent(WelcomeActivity.this, PassangerDashboardActivity.class))).start();
+                new Thread(() -> startActivity(new Intent(WelcomeActivity.this, OwnerDashboardActivity.class))).start();
             } else {
 
                 replaceFragment(LoginFragment.newInstance());

@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.ui.owner.vehicles.MyVehiclesFragment;
+import np.com.naveenniraula.sahayatri.ui.owner.vehicles.detail.VehicleDetailFragment;
 
 public class OwnerDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -81,7 +82,11 @@ public class OwnerDashboardActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_owner_vehicles) {
+
             replaceFragment(MyVehiclesFragment.newInstance());
+        } else if (id == R.id.nav_owner_status) {
+
+            replaceFragment(VehicleDetailFragment.newInstance());
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
