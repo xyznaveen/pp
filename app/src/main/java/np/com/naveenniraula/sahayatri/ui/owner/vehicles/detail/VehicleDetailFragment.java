@@ -4,12 +4,13 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,9 +19,10 @@ import com.google.firebase.database.Query;
 
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.data.model.Vehicle;
+import np.com.naveenniraula.sahayatri.ui.owner.BaseFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.vehicles.adapter.VehicleAdapter;
 
-public class VehicleDetailFragment extends Fragment {
+public class VehicleDetailFragment extends BaseFragment {
 
     private VehicleDetailViewModel mViewModel;
 
@@ -40,6 +42,8 @@ public class VehicleDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        changeTitle(R.string.title_garage);
+
         FirebaseAuth auth = FirebaseAuth.getInstance();
         Query query = FirebaseDatabase.getInstance().getReference().child("vehicles/" + auth.getUid()).orderByKey();
         FirebaseRecyclerOptions<Vehicle> options =
@@ -51,6 +55,18 @@ public class VehicleDetailFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setAdapter(va);
 
+        // called after data has been fetched
+        va.setDataFetchCompleteListener(dataCount -> {
+            ProgressBar pb = view.findViewById(R.id.vdfProgressBar);
+            pb.setVisibility(View.GONE);
+
+            TextView totalVehicle = view.findViewById(R.id.vdfVehicleCount);
+            totalVehicle.setText(String.valueOf(dataCount));
+
+            rv.setVisibility(View.VISIBLE);
+        });
+
+        // user selects an item from the list
         va.setOptionListener((position, model) -> {
 
             VdBottomSheetFragment vdBottomSheetFragment = new VdBottomSheetFragment();

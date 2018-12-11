@@ -28,6 +28,7 @@ public class VehicleAdapter<T> extends FirebaseRecyclerAdapter<T, VehicleAdapter
     private final Context ctx;
     private static OptionsCallbackInterface optionListener;
     private static WeakReference<VehicleAdapter> weakReference;
+    private DataFetchComplete dataFetchCompleteListener;
 
     public VehicleAdapter(@NonNull FirebaseRecyclerOptions options, Context ctx) {
         super(options);
@@ -51,8 +52,19 @@ public class VehicleAdapter<T> extends FirebaseRecyclerAdapter<T, VehicleAdapter
         return new FirebaseRecyclerVH(view);
     }
 
+    @Override
+    public void onDataChanged() {
+        super.onDataChanged();
+
+        dataFetchCompleteListener.onDataFetch(getItemCount());
+    }
+
     public void setOptionListener(OptionsCallbackInterface optionListener) {
         VehicleAdapter.optionListener = optionListener;
+    }
+
+    public void setDataFetchCompleteListener(DataFetchComplete dataFetchCompleteListener) {
+        this.dataFetchCompleteListener = dataFetchCompleteListener;
     }
 
     static class FirebaseRecyclerVH extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -82,6 +94,10 @@ public class VehicleAdapter<T> extends FirebaseRecyclerAdapter<T, VehicleAdapter
 
     public interface OptionsCallbackInterface {
         void onOptionClicked(int position, Vehicle model);
+    }
+
+    public interface DataFetchComplete {
+        void onDataFetch(int dataCount);
     }
 
 }

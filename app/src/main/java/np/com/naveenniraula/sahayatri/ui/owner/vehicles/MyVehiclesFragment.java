@@ -34,6 +34,8 @@ public class MyVehiclesFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        changeTitle(R.string.title_garage);
+
         attachListeners();
     }
 

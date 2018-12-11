@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import np.com.naveenniraula.sahayatri.BaseActivity;
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.WelcomeActivity;
+import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.BookVehicleFragment;
 import np.com.naveenniraula.sahayatri.ui.passanger.dashboard.PassangerDashboardFragment;
 import np.com.naveenniraula.sahayatri.ui.passanger.profile.ProfileFragment;
 import np.com.naveenniraula.sahayatri.util.MiscUtil;
@@ -145,21 +146,20 @@ public class PassangerDashboardActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.nav_action_dashboard: {
-                visibleFragment = PassangerDashboardFragment.newInstance();
-                break;
-            }
-            case R.id.nav_action_profile: {
-                visibleFragment = ProfileFragment.newInstance();
-                break;
-            }
-            case R.id.nav_action_logout: {
-                mAuth.signOut();
-                finish();
-                startActivity(new Intent(PassangerDashboardActivity.this, WelcomeActivity.class));
-                break;
-            }
+        if (id == R.id.nav_action_dashboard) {
+
+            visibleFragment = PassangerDashboardFragment.newInstance();
+        } else if (id == R.id.nav_action_profile) {
+
+            visibleFragment = ProfileFragment.newInstance();
+        } else if (id == R.id.nav_pass_new_booking) {
+
+            replaceFragment(BookVehicleFragment.newInstance());
+        } else if (id == R.id.nav_action_logout) {
+
+            mAuth.signOut();
+            finish();
+            startActivity(new Intent(PassangerDashboardActivity.this, WelcomeActivity.class));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -182,10 +182,7 @@ public class PassangerDashboardActivity extends BaseActivity
 
             Fragment thisFragment = getSupportFragmentManager().findFragmentById(R.id.content);
 
-            if (thisFragment == visibleFragment) {
-
-                replaceFragment(visibleFragment);
-            }
+            replaceFragment(visibleFragment);
         }
 
         @Override

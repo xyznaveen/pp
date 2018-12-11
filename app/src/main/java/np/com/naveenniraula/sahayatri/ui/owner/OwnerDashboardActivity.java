@@ -16,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import np.com.naveenniraula.sahayatri.R;
-import np.com.naveenniraula.sahayatri.ui.owner.vehicles.MyVehiclesFragment;
+import np.com.naveenniraula.sahayatri.ui.owner.booking.BookingStatusFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.vehicles.detail.VehicleDetailFragment;
 
 public class OwnerDashboardActivity extends AppCompatActivity
@@ -41,6 +41,8 @@ public class OwnerDashboardActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        changeTitle(R.string.title_vehicle_owner);
     }
 
     @Override
@@ -81,12 +83,12 @@ public class OwnerDashboardActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_owner_vehicles) {
-
-            replaceFragment(MyVehiclesFragment.newInstance());
-        } else if (id == R.id.nav_owner_status) {
+        if (id == R.id.nav_owner_status) {
 
             replaceFragment(VehicleDetailFragment.newInstance());
+        } else if (id == R.id.nav_owner_booking_status) {
+
+            replaceFragment(BookingStatusFragment.newInstance());
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

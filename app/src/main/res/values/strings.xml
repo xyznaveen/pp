@@ -44,4 +44,18 @@
     </string>
     <string name="title_owner_vehicles">My Vehicles</string>
     <string name="subtitle_owner_vehicles">Manage the vechiles you own.</string>
+    <string name="title_garage">Garage</string>
+    <string name="title_vehicle_owner">Vehicle Owner Dashboard</string>
+    <string name="title_bookings">Bookings</string>
+
+    <string-array name="place_name">
+        <item>Kathmandu</item>
+        <item>Bhairahawa</item>
+        <item>Bhadrapur</item>
+        <item>Wakanda</item>
+        <item>Utopia</item>
+        <item>Upside Down</item>
+        <item>Happiness</item>
+    </string-array>
+
 </resources>

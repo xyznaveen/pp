@@ -28,6 +28,11 @@
                     android:icon="@drawable/ic_history"
                     android:iconTint="@color/colorPrimaryDark"
                     android:title="Transaction History" />
+                <item
+                    android:id="@+id/nav_pass_new_booking"
+                    android:icon="@drawable/ic_history"
+                    android:iconTint="@color/colorPrimaryDark"
+                    android:title="Book A Seat" />
             </menu>
         </item>
     </group>
