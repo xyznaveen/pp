@@ -61,17 +61,25 @@ public class MyVehiclesViewModel extends ViewModel {
             newLiveData.postValue(false);
             return newLiveData;
         }
+
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference dbRef = db.getReference("vehicles/" + mAuth.getUid());
-        dbRef.push().setValue(vehicle).addOnCompleteListener(task -> {
 
-            if (task.getException() != null) {
+        DatabaseReference currentUserRef =
+                db.getReference("Vehicle")
+                        .child(mAuth.getUid());
 
-                Log.i("BQ7CH72", "Found an error :: " + task.getException().getLocalizedMessage());
-            }
+        currentUserRef.push()
+                .setValue(vehicle)
+                .addOnCompleteListener(task -> {
 
-            newLiveData.postValue(task.isSuccessful());
-        });
+                    if (task.getException() != null) {
+
+                        Log.i("BQ7CH72", "Found an error :: "
+                                + task.getException().getLocalizedMessage());
+                    }
+
+                    newLiveData.postValue(task.isSuccessful());
+                });
 
         return newLiveData;
     }

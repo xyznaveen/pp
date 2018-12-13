@@ -62,10 +62,10 @@ public class PermissionUtil {
                 // user denied the requested permission previously
                 permissionListener.onPermissionDenied();
             } else {
-                // the user denied the request for the first time
-                // maybe this is the first application launch ?
+                // the user denied the request for the fragment_first time
+                // maybe this is the fragment_first application launch ?
                 if (PreferenceUtil.isFirstTimeAskingPermission(context, permission)) {
-                    // the permission is being asked for the first time
+                    // the permission is being asked for the fragment_first time
                     PreferenceUtil.firstTimeAskingPermission(context, permission, false);
                     permissionListener.onPermissionRequest();
                 } else {

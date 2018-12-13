@@ -1,14 +1,13 @@
 package np.com.naveenniraula.sahayatri.util.validation;
 
 import android.support.design.widget.TextInputLayout;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 public class Validator {
 
     public enum Rule {
-        NOTEMPTY, EMAIL, PASSWORD, DECIMAL
+        NOTEMPTY, EMAIL, PASSWORD, DECIMAL, PHONE
     }
 
     private String errorMessage;

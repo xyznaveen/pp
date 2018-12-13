@@ -10,6 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,12 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import np.com.naveenniraula.sahayatri.BaseActivity;
 import np.com.naveenniraula.sahayatri.R;
@@ -25,13 +32,12 @@ import np.com.naveenniraula.sahayatri.WelcomeActivity;
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.BookVehicleFragment;
 import np.com.naveenniraula.sahayatri.ui.passanger.dashboard.PassangerDashboardFragment;
 import np.com.naveenniraula.sahayatri.ui.passanger.profile.ProfileFragment;
-import np.com.naveenniraula.sahayatri.util.MiscUtil;
+import np.com.naveenniraula.sahayatri.util.MessageHelper;
 
 public class PassangerDashboardActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth mAuth;
-    private Fragment visibleFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +47,12 @@ public class PassangerDashboardActivity extends BaseActivity
         setSupportActionBar(toolbar);
         changeTitle("Passanger");
 
+        testFirebaseQuery();
+
         mAuth = FirebaseAuth.getInstance();
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            MiscUtil.snack(view, "This message will be shown.");
+            MessageHelper.regularSnack(view, "This message will be shown.");
         });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -92,6 +100,31 @@ public class PassangerDashboardActivity extends BaseActivity
         replaceFragment(PassangerDashboardFragment.newInstance());
     }
 
+    private void testFirebaseQuery() {
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference ref = db.getReference("vehicles");
+        Query qu = ref.orderByChild("OwnerName")
+                .equalTo("Miteri");
+
+        qu.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot ds :
+                        dataSnapshot.getChildren()) {
+
+                    Log.i("BQ7CH72", "Total children  :: " + ds.getChildrenCount());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.i("BQ7CH72", "Error " + databaseError.getDetails());
+            }
+        });
+    }
+
     private void fetchUserDetails() {
 
 
@@ -113,9 +146,15 @@ public class PassangerDashboardActivity extends BaseActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+            return;
         }
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        if (fragment instanceof BookVehicleFragment) {
+            return;
+        }
+
+        super.onBackPressed();
     }
 
     @Override
@@ -148,10 +187,10 @@ public class PassangerDashboardActivity extends BaseActivity
 
         if (id == R.id.nav_action_dashboard) {
 
-            visibleFragment = PassangerDashboardFragment.newInstance();
+            replaceFragment(PassangerDashboardFragment.newInstance());
         } else if (id == R.id.nav_action_profile) {
 
-            visibleFragment = ProfileFragment.newInstance();
+            replaceFragment(ProfileFragment.newInstance());
         } else if (id == R.id.nav_pass_new_booking) {
 
             replaceFragment(BookVehicleFragment.newInstance());
@@ -166,29 +205,5 @@ public class PassangerDashboardActivity extends BaseActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    DrawerLayout.DrawerListener drawerListener = new DrawerLayout.DrawerListener() {
-        @Override
-        public void onDrawerSlide(@NonNull View view, float v) {
-
-        }
-
-        @Override
-        public void onDrawerOpened(@NonNull View view) {
-        }
-
-        @Override
-        public void onDrawerClosed(@NonNull View view) {
-
-            Fragment thisFragment = getSupportFragmentManager().findFragmentById(R.id.content);
-
-            replaceFragment(visibleFragment);
-        }
-
-        @Override
-        public void onDrawerStateChanged(int i) {
-
-        }
-    };
 
 }

@@ -45,7 +45,11 @@ public class VehicleDetailFragment extends BaseFragment {
         changeTitle(R.string.title_garage);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        Query query = FirebaseDatabase.getInstance().getReference().child("vehicles/" + auth.getUid()).orderByKey();
+        if (auth.getUid() == null) {
+            return;
+        }
+
+        Query query = FirebaseDatabase.getInstance().getReference().child("Vehicle").child(auth.getUid()).orderByKey();
         FirebaseRecyclerOptions<Vehicle> options =
                 new FirebaseRecyclerOptions.Builder<Vehicle>()
                         .setQuery(query, Vehicle.class)

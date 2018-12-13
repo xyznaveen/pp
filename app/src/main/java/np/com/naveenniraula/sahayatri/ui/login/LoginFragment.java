@@ -31,9 +31,10 @@ import np.com.naveenniraula.sahayatri.ui.owner.OwnerDashboardActivity;
 import np.com.naveenniraula.sahayatri.ui.passanger.PassangerDashboardActivity;
 import np.com.naveenniraula.sahayatri.ui.register.RegisterFragment;
 import np.com.naveenniraula.sahayatri.util.Constants;
+import np.com.naveenniraula.sahayatri.util.MessageHelper;
 import np.com.naveenniraula.sahayatri.util.PermissionUtil;
 import np.com.naveenniraula.sahayatri.util.PreferenceUtil;
-import np.com.naveenniraula.sahayatri.util.TextUtil;
+import np.com.naveenniraula.sahayatri.util.InputHelper;
 import np.com.naveenniraula.sahayatri.util.ValidationUtil;
 
 public class LoginFragment extends BaseFragment
@@ -80,44 +81,25 @@ public class LoginFragment extends BaseFragment
         Button actionLogin = view.findViewById(R.id.lfActionLogin);
         actionLogin.setOnClickListener((clickedView) -> {
 
-            TextInputLayout email = getView().findViewById(R.id.lfInputUsername);
-            TextInputLayout pwd = getView().findViewById(R.id.lfInputPassword);
+            TextInputLayout email = view.findViewById(R.id.lfInputUsername);
+            TextInputLayout pwd = view.findViewById(R.id.lfInputPassword);
 
             List<ValidationModel> list = new ArrayList<>();
             list.add(new ValidationModel(email, getText(R.string.error_email), ValidationModel.Rule.EMAIL));
             list.add(new ValidationModel(pwd, getText(R.string.error_password), ValidationModel.Rule.PASSWORD));
 
             if (!ValidationUtil.isInputInvalid(list)) {
-                ProgressBar progressBar = getView().findViewById(R.id.lfProgressBar);
+                ProgressBar progressBar = view.findViewById(R.id.lfProgressBar);
                 progressBar.setVisibility(View.VISIBLE);
 
                 if (email == null && pwd == null) {
                     return;
                 }
 
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.signInWithEmailAndPassword(TextUtil.getText(email),
-                        TextUtil.getText(pwd)).addOnCompleteListener(task -> {
-
-                    PreferenceUtil pf = new PreferenceUtil(getActivity());
-                    pf.saveString(USER_TYPE, mViewModel.fetchString().getValue());
-
-                    progressBar.setVisibility(View.GONE);
-
-                    Intent intent;
-
-                    if (PASSANGER.equals(pf.getString(USER_TYPE))) {
-
-                        intent = new Intent(getActivity(), PassangerDashboardActivity.class);
-                        startActivity(intent);
-                    } else {
-
-                        intent = new Intent(getActivity(), OwnerDashboardActivity.class);
-                        startActivity(intent);
-                    }
-                    getActivity().finish();
-                    getActivity().overridePendingTransition(0, 0);
-                });
+                mViewModel.authenticate(
+                        InputHelper.getString(email),
+                        InputHelper.getString(pwd)
+                );
             }
         });
 
@@ -180,10 +162,54 @@ public class LoginFragment extends BaseFragment
         mViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
 
         // observe for data changes from view model
-        mViewModel.fetchString().observe(this, stringObserver);
+        mViewModel.getUserType().observe(this, stringObserver);
 
         // set a default user type selected
         actionVehicleOwner.callOnClick();
+
+        mViewModel.getUserType().observe(this, value -> {
+            PreferenceUtil pf = new PreferenceUtil(getActivity());
+            pf.saveString(USER_TYPE, value);
+        });
+
+        mViewModel.observeAuthenticationChange().observe(this, authenticationResult -> {
+
+            hideProgressBar();
+
+            if (!authenticationResult.isAuthStatus()) {
+
+                MessageHelper.showErrorSnack(this, authenticationResult.getErrorMessage());
+                return;
+            }
+
+            PreferenceUtil pf = new PreferenceUtil(getActivity());
+            if (PASSANGER.equals(pf.getString(USER_TYPE))) {
+
+                startActivity(PassangerDashboardActivity.class);
+            } else {
+
+                startActivity(OwnerDashboardActivity.class);
+            }
+        });
+
+    }
+
+    private void startActivity(Class<?> cls) {
+
+        if (getActivity() == null) return;
+
+        Intent intent = new Intent(getActivity(), cls);
+        startActivity(intent);
+        getActivity().finish();
+        getActivity().overridePendingTransition(0, 0);
+    }
+
+    private void hideProgressBar() {
+
+        if (getView() == null) return;
+
+        ProgressBar progressBar = getView().findViewById(R.id.lfProgressBar);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void updateText(String s) {
@@ -238,7 +264,7 @@ public class LoginFragment extends BaseFragment
                     actionVehicleOwner.setBackgroundColor(transparent);
                     actionPassanger.setTextColor(active);
                     actionPassanger.setBackgroundColor(inactive);
-                    mViewModel.fetchString().setValue(PASSANGER);
+                    mViewModel.setUserType(PASSANGER);
                     break;
                 }
                 case R.id.lfActionVehicle: {
@@ -246,7 +272,7 @@ public class LoginFragment extends BaseFragment
                     actionPassanger.setBackgroundColor(transparent);
                     actionVehicleOwner.setTextColor(active);
                     actionVehicleOwner.setBackgroundColor(inactive);
-                    mViewModel.fetchString().setValue(VEHICLE_OWNER);
+                    mViewModel.setUserType(VEHICLE_OWNER);
                     break;
                 }
                 default:

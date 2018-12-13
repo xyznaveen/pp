@@ -2,7 +2,7 @@ package np.com.naveenniraula.sahayatri.data.model;
 
 import java.security.NoSuchAlgorithmException;
 
-import np.com.naveenniraula.sahayatri.util.MiscUtil;
+import np.com.naveenniraula.sahayatri.util.MessageHelper;
 
 public class Vehicle {
 
@@ -69,7 +69,7 @@ public class Vehicle {
         StringBuilder sb = new StringBuilder(model.trim());
         sb.append(registrationNumber.trim());
         try {
-            vehicleHash = MiscUtil.md5(sb.toString().toLowerCase().replaceAll(" ", ""));
+            vehicleHash = MessageHelper.md5(sb.toString().toLowerCase().replaceAll(" ", ""));
         } catch (NoSuchAlgorithmException e) {
             return false;
         }

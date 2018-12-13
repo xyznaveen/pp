@@ -1,7 +1,9 @@
 package np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,11 @@ public class NewBookingAdapter extends FragmentPagerAdapter {
     public void removeAllPage() {
         fragmentList.clear();
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        super.destroyItem(container, position, object);
     }
 
     @Override

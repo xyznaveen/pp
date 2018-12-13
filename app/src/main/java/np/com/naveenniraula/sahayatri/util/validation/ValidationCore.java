@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 public class ValidationCore {
 
     private static final int DEFAULT_PASSWORD_LENGTH = 8;
+    private static final int DEFAULT_PHONE_NUMBER_LENGTH = 10;
+    private static final int DEFAULT_PHONE_NUMBER_LENGTH_CC = 13;
     private Validator.Rule rule;
     private String value;
 
@@ -40,11 +42,30 @@ public class ValidationCore {
 
                 return hasValidDecimal(value);
             }
+            case PHONE: {
+
+                return hasValidPhoneNumber(value);
+            }
             default: {
 
                 return false;
             }
         }
+    }
+
+    private boolean hasValidPhoneNumber(String value) {
+
+        if (isNotEmpty(value)) {
+            try {
+                Long.parseLong(value);
+                return value.length() == DEFAULT_PHONE_NUMBER_LENGTH
+                        || value.length() == DEFAULT_PHONE_NUMBER_LENGTH_CC;
+            } catch (NumberFormatException exception) {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     private boolean hasValidDecimal(String value) {

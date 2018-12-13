@@ -14,6 +14,7 @@ import android.widget.Toast;
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.data.model.Vehicle;
 import np.com.naveenniraula.sahayatri.ui.owner.BaseFragment;
+import np.com.naveenniraula.sahayatri.util.InputHelper;
 import np.com.naveenniraula.sahayatri.util.validation.Rectify;
 
 public class MyVehiclesFragment extends BaseFragment {
@@ -63,28 +64,55 @@ public class MyVehiclesFragment extends BaseFragment {
 
         if (isInputValid()) {
 
-            mViewModel.saveVehicle(new Vehicle("MER XAK 210", "BA 2 JA 9822", 100, 3)).observe(this, aBoolean -> {
+            Vehicle vehicle = prepareModel();
 
-                if (aBoolean != null && aBoolean) {
+            mViewModel.saveVehicle(vehicle)
+                    .observe(this, aBoolean -> {
 
-                    Toast.makeText(getContext(), "Vehicle added successfully.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                        if (aBoolean != null && aBoolean) {
 
-                Toast.makeText(getContext(), "Could Not Create New Vehicle.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Vehicle added successfully.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-            });
+                        Toast.makeText(getContext(), "Could Not Create New Vehicle.", Toast.LENGTH_SHORT).show();
+
+                    });
         }
 
     }
 
+    private Vehicle prepareModel() {
+
+        if (getView() == null) return null;
+
+        Vehicle vehicle = new Vehicle();
+        TextInputLayout model = getView().findViewById(R.id.mvfModel);
+        TextInputLayout reg = getView().findViewById(R.id.mvfRegistrationNumber);
+        TextInputLayout seatCount = getView().findViewById(R.id.mvfTotalSeatCount);
+        TextInputLayout crewCount = getView().findViewById(R.id.mvfCrewCount);
+
+        vehicle.setModel(InputHelper.getString(model));
+        vehicle.setRegistrationNumber(InputHelper.getString(reg));
+        vehicle.setTotalSeatCount(Integer.parseInt(InputHelper.getString(seatCount)));
+        vehicle.setTotalCrewCount(Integer.parseInt(InputHelper.getString(crewCount)));
+
+        return vehicle;
+    }
+
     private boolean isInputValid() {
 
-        Rectify rectify = new Rectify();
+        if (getView() == null) return false;
 
+        Rectify rectify = new Rectify();
         TextInputLayout model = getView().findViewById(R.id.mvfModel);
         rectify.basic(model);
-
+        TextInputLayout reg = getView().findViewById(R.id.mvfRegistrationNumber);
+        rectify.basic(reg);
+        TextInputLayout seatCount = getView().findViewById(R.id.mvfTotalSeatCount);
+        rectify.basic(seatCount);
+        TextInputLayout crewCount = getView().findViewById(R.id.mvfCrewCount);
+        rectify.basic(crewCount);
         return rectify.validate();
     }
 

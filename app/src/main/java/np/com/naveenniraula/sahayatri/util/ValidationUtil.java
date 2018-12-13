@@ -24,7 +24,7 @@ public class ValidationUtil {
 
             ValidationModel currentModel = validationModel;
 
-            if (MiscUtil.isInstanceOf(currentModel.getView(), TextInputLayout.class)) {
+            if (MessageHelper.isInstanceOf(currentModel.getView(), TextInputLayout.class)) {
 
                 TextInputLayout layout = (TextInputLayout) currentModel.getView();
                 EditText editText = layout.getEditText();
@@ -37,13 +37,13 @@ public class ValidationUtil {
                 }
 
                 if (currentModel.getErrorType() == ValidationModel.Rule.EMAIL) {
-                    isOneInputInvalid = !TextUtil.isValidEmail(editText.getText().toString());
+                    isOneInputInvalid = !InputHelper.isValidEmail(editText.getText().toString());
                 } else if (currentModel.getErrorType() == ValidationModel.Rule.PHONE) {
-                    isOneInputInvalid = !TextUtil.isValidPhone(editText.getText().toString());
+                    isOneInputInvalid = !InputHelper.isValidPhone(editText.getText().toString());
                 } else if (currentModel.getErrorType() == ValidationModel.Rule.PASSWORD) {
-                    isOneInputInvalid = !TextUtil.isValidPassword(editText.getText().toString());
+                    isOneInputInvalid = !InputHelper.isValidPassword(editText.getText().toString());
                 } else if (currentModel.getErrorType() == ValidationModel.Rule.NAME) {
-                    isOneInputInvalid = !TextUtil.isValidName(editText.getText().toString());
+                    isOneInputInvalid = !InputHelper.isValidName(editText.getText().toString());
                 }
 
                 updateErrorMessage(layout, isOneInputInvalid ? currentModel.getErrorMessage() : "");

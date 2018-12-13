@@ -18,24 +18,29 @@ import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.BookVehicleFr
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SecondFragment extends BasePageFragment {
+public class FourthFragment extends BasePageFragment {
 
+    public static FourthFragment newInstance(BookVehicleFragment bookVehicleFragment) {
 
-    public SecondFragment() {
+        FourthFragment fragment = new FourthFragment();
+        fragment.parentWeakReference = new WeakReference<>(bookVehicleFragment);
+        return fragment;
+    }
+
+    public FourthFragment() {
         // Required empty public constructor
     }
 
-    public static BasePageFragment newInstance(BookVehicleFragment bookVehicleFragment) {
-        SecondFragment secondFragment = new SecondFragment();
-        secondFragment.parentWeakReference = new WeakReference<>(bookVehicleFragment);
-        return secondFragment;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second, container, false);
+        return inflater.inflate(R.layout.fragment_fourth, container, false);
     }
 
 
@@ -43,10 +48,10 @@ public class SecondFragment extends BasePageFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setupViews();
+        registerListeners();
     }
 
-    private void setupViews() {
+    private void registerListeners() {
 
         View view = getView();
 
@@ -54,14 +59,16 @@ public class SecondFragment extends BasePageFragment {
             return;
         }
 
-        Button showSeats = view.findViewById(R.id.btnNext);
-        showSeats.setOnClickListener(v -> {
+        Button next = view.findViewById(R.id.ftComplete);
+        next.setOnClickListener(v -> {
 
-            if (parentWeakReference.get() != null) {
 
-                parentWeakReference.get().nextPage();
+            if (parentWeakReference.get() != null
+                    && parentWeakReference.get().getActivity() != null) {
+
+                parentWeakReference.get().getActivity().onBackPressed();
             }
         });
-
     }
+
 }

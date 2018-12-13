@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class TextUtil {
+public class InputHelper {
 
     public static boolean isValidName(String s) {
         //TODO check for number input
@@ -33,27 +33,31 @@ public class TextUtil {
      * @param view
      * @return
      */
-    public static String getText(View view) {
+    public static String getString(View view) {
 
-        if (MiscUtil.isInstanceOf(view, TextInputLayout.class)) {
+        if (view == null) {
+            return "";
+        }
+
+        if (MessageHelper.isInstanceOf(view, TextInputLayout.class)) {
 
             TextInputLayout v = (TextInputLayout) view;
-            return v.getEditText() == null ? null : String.valueOf(v.getEditText().getText());
-        } else if (MiscUtil.isInstanceOf(view, TextInputEditText.class)) {
+            return v.getEditText() == null ? "" : String.valueOf(v.getEditText().getText());
+        } else if (MessageHelper.isInstanceOf(view, TextInputEditText.class)) {
 
             TextInputEditText v = (TextInputEditText) view;
-            return v.getText() == null ? null : String.valueOf(v.getText());
-        } else if (MiscUtil.isInstanceOf(view, EditText.class)) {
+            return v.getText() == null ? "" : String.valueOf(v.getText());
+        } else if (MessageHelper.isInstanceOf(view, EditText.class)) {
 
             EditText v = (EditText) view;
             return String.valueOf(v.getText());
-        } else if (MiscUtil.isInstanceOf(view, TextView.class)) {
+        } else if (MessageHelper.isInstanceOf(view, TextView.class)) {
 
             TextView v = (TextView) view;
             return String.valueOf(v.getText());
         }
 
-        return null;
+        return "";
     }
 
 }

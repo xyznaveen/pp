@@ -61,6 +61,31 @@ public class Rectify {
         validatorList.add(validator);
     }
 
+    public void phone(View view) {
+
+        Validator validator = null;
+
+        if (view instanceof TextInputLayout) {
+
+            TextInputLayout textInputLayout = (TextInputLayout) view;
+            validator = new ValidatorBuilder(textInputLayout.getContext())
+                    .setErrorMessage(R.string.rec_error_required)
+                    .setRule(Validator.Rule.PHONE)
+                    .setTextInputLayout(textInputLayout)
+                    .build();
+        } else if (view instanceof EditText) {
+
+            EditText editText = (EditText) view;
+            validator = new ValidatorBuilder(editText.getContext())
+                    .setErrorMessage(R.string.rec_error_required)
+                    .setRule(Validator.Rule.PHONE)
+                    .setEditText(editText)
+                    .build();
+        }
+
+        validatorList.add(validator);
+    }
+
     public void decimal(View view) {
 
         Validator validator = null;
@@ -163,7 +188,7 @@ public class Rectify {
             // if everything is valid moveFocusTo will be same as the size of validatorList
             // hence leading to this crash
 
-            // move the focus to the first input
+            // move the focus to the fragment_first input
             validatorList.get(0).focusThis();
         }
 

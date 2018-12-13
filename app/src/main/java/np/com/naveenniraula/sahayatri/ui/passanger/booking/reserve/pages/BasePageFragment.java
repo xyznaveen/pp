@@ -19,7 +19,7 @@ public class BasePageFragment extends Fragment {
 
     public void previousPage() {
         if (parentWeakReference.get() != null) {
-            parentWeakReference.get().nextPage();
+            parentWeakReference.get().prevPage();
         }
     }
 

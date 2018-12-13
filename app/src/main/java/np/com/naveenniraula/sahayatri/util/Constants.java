@@ -12,7 +12,4 @@ public class Constants {
     public static final String PREFS_FILE_NAME = "app_pref";
     public static final int REQUEST_LOGIN_PERMS = 14001;
 
-    public static final String REF_PASSANGER = "pa/";
-    public static final String REF_VEHICLE_OWNER = "ve/";
-
 }

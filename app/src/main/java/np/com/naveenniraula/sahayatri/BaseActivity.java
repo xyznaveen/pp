@@ -43,8 +43,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void replaceFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left, R.anim.exit_right)
-                .replace(R.id.container, fragment, fragment.getClass().getSimpleName())
-                .addToBackStack(null)
+                .add(R.id.container, fragment, fragment.getClass().getSimpleName())
+                .addToBackStack(fragment.getClass().getSimpleName())
                 .commit();
     }
 

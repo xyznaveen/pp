@@ -15,14 +15,12 @@
             android:name=".WelcomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <meta-data
@@ -36,8 +34,8 @@
         <activity
             android:name=".ui.owner.OwnerDashboardActivity"
             android:label="@string/title_activity_owner_dashboard"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".ValidationText" />
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>
