@@ -46,7 +46,7 @@ public class MessageHelper {
 
         if (!TextUtils.isEmpty(message) && view != null) {
 
-            Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
+            Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
             snackbar.getView().setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.colorPrimaryDark));
             TextView tv = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
             tv.setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorWhite));

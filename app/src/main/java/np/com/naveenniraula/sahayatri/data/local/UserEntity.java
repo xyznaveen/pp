@@ -1,5 +1,7 @@
 package np.com.naveenniraula.sahayatri.data.local;
 
+import android.support.annotation.NonNull;
+
 public class UserEntity {
 
     private String email;
@@ -18,7 +20,6 @@ public class UserEntity {
         this.email = email;
         this.password = password;
     }
-
 
 
     public String getEmail() {
@@ -75,5 +76,11 @@ public class UserEntity {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Username: " + getEmail() + "; Password: " + getPassword();
     }
 }

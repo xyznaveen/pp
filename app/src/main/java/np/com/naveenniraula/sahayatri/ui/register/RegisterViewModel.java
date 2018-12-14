@@ -26,24 +26,24 @@ public class RegisterViewModel extends ViewModel {
     public void registerNewUser(UserEntity user) {
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
-                .addOnCompleteListener(task -> {
+        firebaseAuth.addAuthStateListener(firebaseAuth1 -> {
 
-                    if (task.isSuccessful()) {
+            if (firebaseAuth1.getUid() != null) {
+                // we do not want to store password
+                user.setPassword("");
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference reference = database.getReference();
+                reference.child(user.getUserType())
+                        .child(firebaseAuth1.getUid())
+                        .setValue(user).addOnCompleteListener(task1 -> {
 
-                        // we do not want to store password
-                        user.setPassword(null);
-
-                        FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference reference = database.getReference("Passanger");
-                        reference.child(user.getUserType())
-                                .child(firebaseAuth.getUid())
-                                .setValue(user).addOnCompleteListener(task1 -> {
-
-                            registrationLiveData.postValue(task1.isSuccessful());
-                        });
-                    }
+                    registrationLiveData.postValue(task1.isSuccessful());
                 });
+            }
+
+        });
+        firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
+                .addOnFailureListener(e -> registrationLiveData.postValue(false));
     }
 
     static class RegisteredUserPojo {

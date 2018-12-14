@@ -95,8 +95,8 @@ public class ValidationCore {
     private boolean hasValidPassword(String value) {
 
         return isNotEmpty(value)
-                && value.length() >= DEFAULT_PASSWORD_LENGTH
-                && hasSpecialAlphaNumericCharacter(value);
+                && value.length() >= DEFAULT_PASSWORD_LENGTH;
+        //&& hasSpecialAlphaNumericCharacter(value);
     }
 
     /**

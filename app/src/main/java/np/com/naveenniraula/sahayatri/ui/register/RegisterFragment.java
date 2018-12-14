@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +17,14 @@ import np.com.naveenniraula.sahayatri.BaseFragment;
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.WelcomeActivity;
 import np.com.naveenniraula.sahayatri.data.local.UserEntity;
-import np.com.naveenniraula.sahayatri.util.InputHelper;
+import np.com.naveenniraula.sahayatri.util.MessageHelper;
 import np.com.naveenniraula.sahayatri.util.validation.Rectify;
 
 public class RegisterFragment extends BaseFragment
         implements View.OnClickListener {
 
     private static final String USER = "Users";
+    private static final String USER_TYPE = "Passenger";
     private RegisterViewModel mViewModel;
 
     private UserEntity newUser;
@@ -40,6 +42,9 @@ public class RegisterFragment extends BaseFragment
         rf.newUser = new UserEntity();
         return rf;
     }
+
+    private Button register;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -59,10 +64,9 @@ public class RegisterFragment extends BaseFragment
         actionVehicleOwner.setOnClickListener(this);
         actionPassanger.setOnClickListener(this);
 
-        Button register = view.findViewById(R.id.rfRegisterBtn);
+        register = view.findViewById(R.id.rfRegisterBtn);
         register.setOnClickListener((view2) -> {
 
-            register.setEnabled(false);
             createAccount();
         });
 
@@ -73,6 +77,7 @@ public class RegisterFragment extends BaseFragment
     }
 
     private void prepareColors() {
+
         inactive = getResources().getColor(R.color.colorPrimaryDark);
         active = getResources().getColor(R.color.colorWhite);
         transparent = getResources().getColor(android.R.color.transparent);
@@ -82,11 +87,18 @@ public class RegisterFragment extends BaseFragment
 
         if (isInputValid()) {
 
+            changeProgressBarVisibility(View.VISIBLE);
             UserEntity userEntity = getUserModel();
 
-            changeProgressBarVisibility(View.VISIBLE);
-            mViewModel.registerNewUser(userEntity);
+            if (userEntity != null) {
+
+                mViewModel.registerNewUser(userEntity);
+            }
+
+            return;
         }
+
+        register.setVisibility(View.VISIBLE);
     }
 
     private UserEntity getUserModel() {
@@ -94,19 +106,21 @@ public class RegisterFragment extends BaseFragment
         if (getView() == null) {
             return null;
         }
+
         TextInputLayout fullName = getView().findViewById(R.id.rfInputFullName);
         TextInputLayout email = getView().findViewById(R.id.rfInputEmail);
         TextInputLayout password = getView().findViewById(R.id.rfInputPassword);
         TextInputLayout phone = getView().findViewById(R.id.rfPhoneNumber);
 
         UserEntity user = new UserEntity();
-        user.setEmail(InputHelper.getString(email));
-        user.setPassword(InputHelper.getString(password));
-        user.setName(InputHelper.getString(fullName));
-        user.setPhoneNumber(InputHelper.getString(phone));
+        user.setEmail(email.getEditText().getText().toString());
+        user.setPassword(password.getEditText().getText().toString());
+        user.setName(fullName.getEditText().getText().toString());
+        user.setPhoneNumber(phone.getEditText().getText().toString());
         user.setRegistrationDate(System.currentTimeMillis());
+        user.setUserType(USER_TYPE);
 
-        return new UserEntity();
+        return user;
     }
 
     /**
@@ -138,15 +152,36 @@ public class RegisterFragment extends BaseFragment
 
         mViewModel.observeRegistrationStatus().observe(this, aBoolean -> {
 
+            register.setVisibility(View.VISIBLE);
             changeProgressBarVisibility(View.GONE);
+            if (aBoolean != null && aBoolean) {
+                MessageHelper.regularSnack(this, "User registration success. Please login with same details.");
+                clearFields();
+                return;
+            }
+            MessageHelper.showErrorSnack(this, "Apologies! We are unable to process your request.");
         });
+    }
+
+    private void clearFields() {
+
+        ConstraintLayout root = getView().findViewById(R.id.rfRoot);
+        TextInputLayout child = null;
+        for (int i = 0; i < root.getChildCount(); i++) {
+
+            if (root.getChildAt(i) instanceof TextInputLayout) {
+
+                child = (TextInputLayout) root.getChildAt(i);
+                child.getEditText().setText("");
+            }
+        }
+
     }
 
     private void changeProgressBarVisibility(int visibility) {
         ProgressBar progressBar = getView().findViewById(R.id.rfProgressBar);
         progressBar.setVisibility(visibility);
     }
-
 
     @Override
     public void onClick(View view) {
