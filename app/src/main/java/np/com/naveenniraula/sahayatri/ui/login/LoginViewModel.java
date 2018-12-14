@@ -2,8 +2,17 @@ package np.com.naveenniraula.sahayatri.ui.login;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import np.com.naveenniraula.sahayatri.data.local.UserEntity;
 
 public class LoginViewModel extends ViewModel {
 
@@ -50,6 +59,64 @@ public class LoginViewModel extends ViewModel {
         }
 
         return authLiveData;
+    }
+
+    private MutableLiveData<UserEntity> userDetailLiveData;
+
+    public MutableLiveData<UserEntity> observeUserDetailFetch() {
+
+        if (userDetailLiveData == null) {
+
+            userDetailLiveData = new MutableLiveData<>();
+        }
+
+        return userDetailLiveData;
+    }
+
+    private ValueEventListener userDetailEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            if (dataSnapshot.getValue() != null) {
+
+                userDetailLiveData.postValue(dataSnapshot.getValue(UserEntity.class));
+                return;
+            }
+
+            userDetailLiveData.postValue(null);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            Log.i("BQ7CH72", "Database error : " + databaseError.getDetails());
+        }
+    };
+
+    public void fetchUserDetail() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getUid();
+
+        if (userId == null) {
+
+            Log.i("BQ7CH72", "User was not authenticated");
+            // not authenticated
+            userDetailLiveData.postValue(null);
+            return;
+        }
+
+        String userType = mutableLiveData.getValue();
+        if (userType == null) {
+
+            Log.i("BQ7CH72", "User type is not selected.");
+            // user type is, and must be, always defined
+            userDetailLiveData.postValue(null);
+            return;
+        }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReference().child(userType).child(firebaseAuth.getUid());
+        databaseReference.addListenerForSingleValueEvent(userDetailEventListener);
     }
 
     static class AuthenticationResult {

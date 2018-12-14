@@ -31,10 +31,10 @@ import np.com.naveenniraula.sahayatri.ui.owner.OwnerDashboardActivity;
 import np.com.naveenniraula.sahayatri.ui.passanger.PassangerDashboardActivity;
 import np.com.naveenniraula.sahayatri.ui.register.RegisterFragment;
 import np.com.naveenniraula.sahayatri.util.Constants;
+import np.com.naveenniraula.sahayatri.util.InputHelper;
 import np.com.naveenniraula.sahayatri.util.MessageHelper;
 import np.com.naveenniraula.sahayatri.util.PermissionUtil;
 import np.com.naveenniraula.sahayatri.util.PreferenceUtil;
-import np.com.naveenniraula.sahayatri.util.InputHelper;
 import np.com.naveenniraula.sahayatri.util.ValidationUtil;
 
 public class LoginFragment extends BaseFragment
@@ -81,6 +81,7 @@ public class LoginFragment extends BaseFragment
         Button actionLogin = view.findViewById(R.id.lfActionLogin);
         actionLogin.setOnClickListener((clickedView) -> {
 
+            actionLogin.setEnabled(false);
             TextInputLayout email = view.findViewById(R.id.lfInputUsername);
             TextInputLayout pwd = view.findViewById(R.id.lfInputPassword);
 
@@ -96,11 +97,11 @@ public class LoginFragment extends BaseFragment
                     return;
                 }
 
-                mViewModel.authenticate(
-                        InputHelper.getString(email),
-                        InputHelper.getString(pwd)
-                );
+                mViewModel.authenticate(InputHelper.getString(email), InputHelper.getString(pwd));
+                return;
             }
+
+            actionLogin.setEnabled(true);
         });
 
         askForPermission();
@@ -164,9 +165,6 @@ public class LoginFragment extends BaseFragment
         // observe for data changes from view model
         mViewModel.getUserType().observe(this, stringObserver);
 
-        // set a default user type selected
-        actionVehicleOwner.callOnClick();
-
         mViewModel.getUserType().observe(this, value -> {
             PreferenceUtil pf = new PreferenceUtil(getActivity());
             pf.saveString(USER_TYPE, value);
@@ -174,24 +172,64 @@ public class LoginFragment extends BaseFragment
 
         mViewModel.observeAuthenticationChange().observe(this, authenticationResult -> {
 
-            hideProgressBar();
-
             if (!authenticationResult.isAuthStatus()) {
+
+                hideProgressBar();
+                enableLoginButton();
 
                 MessageHelper.showErrorSnack(this, authenticationResult.getErrorMessage());
                 return;
             }
 
-            PreferenceUtil pf = new PreferenceUtil(getActivity());
-            if (PASSANGER.equals(pf.getString(USER_TYPE))) {
-
-                startActivity(PassangerDashboardActivity.class);
-            } else {
-
-                startActivity(OwnerDashboardActivity.class);
-            }
+            // user exists check user type to redirect user to related dashboard
+            mViewModel.fetchUserDetail();
         });
 
+        mViewModel.observeUserDetailFetch().observe(this, user -> {
+
+            hideProgressBar();
+            enableLoginButton();
+
+            PreferenceUtil pf = new PreferenceUtil(getActivity());
+
+            if (user == null) {
+
+                if (pf.getString(USER_TYPE).equals(PASSANGER)) {
+
+                    // if passenger was selected and fetched data was null
+                    // the user must be vehicle owner
+                    // because the query never returns null if value found in database
+                    startActivity(OwnerDashboardActivity.class);
+                    return;
+                }
+
+                startActivity(PassangerDashboardActivity.class);
+                return;
+            }
+
+            if (pf.getString(USER_TYPE).equals(PASSANGER)) {
+
+                // the user is passenger because the data was not null
+                startActivity(PassangerDashboardActivity.class);
+                return;
+            }
+
+            startActivity(OwnerDashboardActivity.class);
+        });
+
+        // set a default user type selected
+        actionVehicleOwner.callOnClick();
+
+    }
+
+    private void enableLoginButton() {
+
+        if (getView() == null) {
+            return;
+        }
+
+        Button actionLogin = getView().findViewById(R.id.lfActionLogin);
+        actionLogin.setEnabled(true);
     }
 
     private void startActivity(Class<?> cls) {
@@ -247,7 +285,7 @@ public class LoginFragment extends BaseFragment
         }
     }
 
-    public static final String PASSANGER = "Passanger";
+    public static final String PASSANGER = "Passenger";
     public static final String VEHICLE_OWNER = "Vehicle Owner";
 
     @Override
