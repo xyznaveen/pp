@@ -60,4 +60,8 @@ public class InputHelper {
         return "";
     }
 
+    public static String getStringAllCaps(View view) {
+
+        return getString(view).toUpperCase();
+    }
 }

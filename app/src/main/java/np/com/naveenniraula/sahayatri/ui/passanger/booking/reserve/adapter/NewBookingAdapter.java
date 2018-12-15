@@ -1,8 +1,10 @@
 package np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.adapter;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -45,4 +47,12 @@ public class NewBookingAdapter extends FragmentPagerAdapter {
         return fragmentList.size();
     }
 
+    public void setBundleFor(int pageNumber, Bundle data) {
+
+        BasePageFragment fr = fragmentList.get(pageNumber);
+        fr.setData(data);
+
+        fragmentList.set(pageNumber, fr);
+        notifyDataSetChanged();
+    }
 }

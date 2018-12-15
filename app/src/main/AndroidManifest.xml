@@ -8,10 +8,11 @@
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="${appName}"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
         <activity
+            android:label="${appName}"
             android:name=".WelcomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden">

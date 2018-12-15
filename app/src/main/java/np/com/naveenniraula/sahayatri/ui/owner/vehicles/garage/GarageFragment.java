@@ -1,4 +1,4 @@
-package np.com.naveenniraula.sahayatri.ui.owner.vehicles.detail;
+package np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +21,14 @@ import com.google.firebase.database.Query;
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.data.model.Vehicle;
 import np.com.naveenniraula.sahayatri.ui.owner.BaseFragment;
-import np.com.naveenniraula.sahayatri.ui.owner.vehicles.adapter.VehicleAdapter;
+import np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage.adapter.VehicleAdapter;
 
-public class VehicleDetailFragment extends BaseFragment {
+public class GarageFragment extends BaseFragment {
 
-    private VehicleDetailViewModel mViewModel;
+    private GarageViewModel mViewModel;
 
-    public static VehicleDetailFragment newInstance() {
-        return new VehicleDetailFragment();
+    public static GarageFragment newInstance() {
+        return new GarageFragment();
     }
 
     @Override
@@ -49,7 +50,13 @@ public class VehicleDetailFragment extends BaseFragment {
             return;
         }
 
-        Query query = FirebaseDatabase.getInstance().getReference().child("Vehicle").child(auth.getUid()).orderByKey();
+//        Query query = FirebaseDatabase.getInstance().getReference()
+//                .child("VehicleList").child(auth.getUid()).orderByKey();
+        Query query = FirebaseDatabase.getInstance().getReference()
+                .child("VehicleList")
+                .orderByChild("vehicleOwnerKey")
+                .equalTo(auth.getUid());
+
         FirebaseRecyclerOptions<Vehicle> options =
                 new FirebaseRecyclerOptions.Builder<Vehicle>()
                         .setQuery(query, Vehicle.class)
@@ -73,15 +80,15 @@ public class VehicleDetailFragment extends BaseFragment {
         // user selects an item from the list
         va.setOptionListener((position, model) -> {
 
-            VdBottomSheetFragment vdBottomSheetFragment = new VdBottomSheetFragment();
-            vdBottomSheetFragment.show(getActivity().getSupportFragmentManager(), "bottom_sheet");
+            GarageBottomSheetFragment garageBottomSheetFragment = new GarageBottomSheetFragment();
+            garageBottomSheetFragment.show(getActivity().getSupportFragmentManager(), "bottom_sheet");
         });
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(VehicleDetailViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(GarageViewModel.class);
         // TODO: Use the ViewModel
     }
 

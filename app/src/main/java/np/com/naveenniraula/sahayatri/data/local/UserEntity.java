@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 public class UserEntity {
 
     private String email;
-    private String phoneNumber;
+    private long phoneNumber;
     private String name;
     private String password;
     private String profileUrl;
@@ -30,11 +30,11 @@ public class UserEntity {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

@@ -1,19 +1,31 @@
 package np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages;
 
+import android.arch.lifecycle.ViewModelProviders;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import java.lang.ref.WeakReference;
 
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.BookVehicleFragment;
 
-public class BasePageFragment extends Fragment {
+public abstract class BasePageFragment extends Fragment {
+
+    public static final String SENDER = "SENDER";
+    public static final String DATE = "Travel Date";
+    public static final String TRAVEL_MODE = "Travel Mode";
+    public static final String FROM = "From";
+    public static final String TO = "To";
+
+    private PageChangeViewModel viewModel;
+
+    protected Bundle bookingConfiguration;
 
     protected WeakReference<BookVehicleFragment> parentWeakReference;
 
-    public void nextPage() {
+    public void nextPage(Bundle data) {
         if (parentWeakReference.get() != null) {
-            parentWeakReference.get().nextPage();
+            parentWeakReference.get().nextPage(data);
         }
     }
 
@@ -38,7 +50,6 @@ public class BasePageFragment extends Fragment {
                 ? parentWeakReference.get().getViewPager().getAdapter().getCount()
                 : currentPageNumber;
 
-        Log.i("BQ7CH72", "Current Page :: " + currentPageNumber);
         changePage(nextPageNumber);
     }
 
@@ -61,4 +72,11 @@ public class BasePageFragment extends Fragment {
         parentWeakReference.get().getViewPager().setCurrentItem(currentPageNumber);
     }
 
+    public void setData(Bundle bundle) {
+        bookingConfiguration = bundle;
+    }
+
+    public Bundle getBookingConfiguration() {
+        return bookingConfiguration;
+    }
 }

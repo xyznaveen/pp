@@ -1,4 +1,4 @@
-package np.com.naveenniraula.sahayatri.ui.owner.vehicles;
+package np.com.naveenniraula.sahayatri.ui.owner.vehicles.add;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
@@ -14,7 +14,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import np.com.naveenniraula.sahayatri.data.model.Vehicle;
 
-public class MyVehiclesViewModel extends ViewModel {
+public class AddVehicleViewModel extends ViewModel {
 
     private MutableLiveData<String> testLiveData;
     private Disposable dps;
@@ -64,12 +64,14 @@ public class MyVehiclesViewModel extends ViewModel {
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
 
-        DatabaseReference currentUserRef =
-                db.getReference("Vehicle")
-                        .child(mAuth.getUid());
+        DatabaseReference currentUserRef = db.getReference()
+                .child("VehicleList")
+                .child(vehicle.getOperationMode()).push();
 
-        currentUserRef.push()
-                .setValue(vehicle)
+        // store key along with value because we will need it later
+        vehicle.setKey(currentUserRef.getKey());
+
+        currentUserRef.setValue(vehicle)
                 .addOnCompleteListener(task -> {
 
                     if (task.getException() != null) {
