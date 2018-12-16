@@ -3,6 +3,7 @@ package np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,20 +33,20 @@ public class ThirdFragmentViewModel extends ViewModel {
         return bookingLiveData;
     }
 
-    public void fetchBooking(@NonNull String userId) {
+    public void fetchBooking(@NonNull String vehicleId) {
 
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMMyyyy", Locale.US);
 
         DatabaseReference dbRef = FirebaseDatabase.getInstance()
-                .getReference("Booking");
+                .getReference("Bookings");
         dbRef.child(sdf.format(date).toUpperCase())
-                .orderByChild("userKey")
-                .equalTo(userId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .orderByChild("vehicleKey")
+                .equalTo(vehicleId)
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                        Log.i("BQ7CH72", "SNAP VALUE :: " + dataSnapshot);
                         if (bookingLiveData != null) {
                             List<BookingModel> models = new ArrayList<>();
                             for (DataSnapshot dsnap :
@@ -93,5 +94,23 @@ public class ThirdFragmentViewModel extends ViewModel {
 
             }
         });
+    }
+
+    public void saveBookings(List<BookingModel> bookingModels) {
+
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMMyyyy", Locale.US);
+
+        String parentNode = sdf.format(date).toUpperCase();
+        DatabaseReference dbRef = FirebaseDatabase.getInstance()
+                .getReference("Bookings")
+                .child(parentNode);
+
+        for (BookingModel bookingModel :
+                bookingModels) {
+
+            dbRef.child(bookingModel.getKey()).setValue(bookingModel);
+        }
+
     }
 }

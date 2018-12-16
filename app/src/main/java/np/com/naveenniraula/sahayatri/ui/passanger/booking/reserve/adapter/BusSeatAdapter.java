@@ -62,10 +62,13 @@ public class BusSeatAdapter extends RecyclerView.Adapter<BusSeatAdapter.ViewHold
     private BusSeatClickListener lstner = position -> {
 
         SeatModel sm = seatModelList.get(position);
-        sm.setBackgroundColor(Color.BLUE);
-        sm.setSelected(!sm.isSelected());
-        seatModelList.set(position, sm);
-        notifyItemChanged(position);
+
+        if (sm.isAvailable()) {
+            sm.setBackgroundColor(Color.BLUE);
+            sm.setSelected(!sm.isSelected());
+            seatModelList.set(position, sm);
+            notifyItemChanged(position);
+        }
     };
 
     @Override
@@ -112,4 +115,7 @@ public class BusSeatAdapter extends RecyclerView.Adapter<BusSeatAdapter.ViewHold
         void seatClicked(int position);
     }
 
+    public List<SeatModel> getSeatModelList() {
+        return seatModelList;
+    }
 }

@@ -15,19 +15,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.data.model.BookingModel;
 import np.com.naveenniraula.sahayatri.data.model.SeatModel;
-import np.com.naveenniraula.sahayatri.data.model.Vehicle;
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.BookVehicleFragment;
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.adapter.BusSeatAdapter;
 
@@ -132,12 +133,17 @@ public class ThirdFragment extends BasePageFragment {
 
         final List<SeatModel> seatModelList = new ArrayList<>();
 
-        SeatModel seatModel = new SeatModel();
+
         for (BookingModel model :
                 value) {
-            seatModel.setAvailable(!model.getBookMode().equals("Booked")
-                    || !model.getBookMode().equals("On Hold"));
+
+            SeatModel seatModel = new SeatModel();
+
+            boolean isBooked = model.getBookMode().equals("Booked");
+            seatModel.setAvailable(!isBooked);
             seatModel.setSeatNumber(model.getSeatIdentifier());
+            seatModel.setSelected(isBooked);
+            seatModel.setAvailable(!isBooked);
             seatModelList.add(seatModel);
         }
 
@@ -155,8 +161,10 @@ public class ThirdFragment extends BasePageFragment {
     }
 
     private void startFetchingInfo() {
-        FirebaseAuth fb = FirebaseAuth.getInstance();
-        viewModel.fetchBooking(fb.getUid());
+
+        String vehicleKey = bundle.getString(VEHICLE_KEY);
+        Log.i("BQ7CH72", "Fetching for vehicle :: " + vehicleKey);
+        viewModel.fetchBooking(vehicleKey);
     }
 
     private BusSeatAdapter adapter;
@@ -173,18 +181,6 @@ public class ThirdFragment extends BasePageFragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.fsSeats);
         recyclerView.setLayoutManager(gridLayoutManager);
-
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-
-        Query query = FirebaseDatabase.getInstance().getReference()
-                .child("VehicleList")
-                .child("Night")
-                .orderByKey();
-
-        FirebaseRecyclerOptions<Vehicle> options =
-                new FirebaseRecyclerOptions.Builder<Vehicle>()
-                        .setQuery(query, Vehicle.class)
-                        .build();
         adapter = new BusSeatAdapter();
         recyclerView.setAdapter(adapter);
     }
@@ -199,7 +195,46 @@ public class ThirdFragment extends BasePageFragment {
 
         Button next = view.findViewById(R.id.fsNext);
         Bundle b = null;
-        next.setOnClickListener(v -> nextPage(b));
+        next.setOnClickListener(v -> {
+            // nextPage(b)
+
+            viewModel.saveBookings(prepareForSeatInsertion());
+
+        });
+    }
+
+    private List<BookingModel> prepareForSeatInsertion() {
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        List<SeatModel> seatModelList = adapter.getSeatModelList();
+        List<BookingModel> bookingModelList = new ArrayList<>();
+
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMMyyyy", Locale.US);
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Bookings");
+        long time = System.currentTimeMillis();
+
+        String parentNode = sdf.format(date).toUpperCase();
+        for (SeatModel sm
+                : seatModelList) {
+
+            dbRef = dbRef.child(parentNode).push();
+            String key = dbRef.getKey();
+
+            BookingModel bm = new BookingModel();
+            bm.setBookedOn(time);
+            bm.setUserKey(auth.getUid());
+            bm.setVehicleKey(bundle.getString(VEHICLE_KEY));
+            bm.setBookMode(sm.isSelected() ? "Booked" : "Not Booked");
+            bm.setPaymentStatus(sm.isSelected() ? "Paid" : "Unpaid");
+            bm.setSeatIdentifier(sm.getSeatNumber());
+            bm.setKey(key);
+
+            bookingModelList.add(bm);
+        }
+
+        return bookingModelList;
     }
 
     @Override

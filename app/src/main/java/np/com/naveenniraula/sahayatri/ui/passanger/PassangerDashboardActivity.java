@@ -45,7 +45,7 @@ public class PassangerDashboardActivity extends BaseActivity
         setContentView(R.layout.activity_passanger_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        changeTitle("Passanger");
+        changeTitle("Passenger");
 
         testFirebaseQuery();
 
