@@ -46,7 +46,6 @@ public class ThirdFragmentViewModel extends ViewModel {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.i("BQ7CH72", "SNAP VALUE :: " + dataSnapshot);
                         if (bookingLiveData != null) {
                             List<BookingModel> models = new ArrayList<>();
                             for (DataSnapshot dsnap :
@@ -96,6 +95,18 @@ public class ThirdFragmentViewModel extends ViewModel {
         });
     }
 
+
+    private MutableLiveData<Boolean> savedBookingsLiveData;
+
+    public MutableLiveData<Boolean> observeSaveBookings() {
+
+        if (savedBookingsLiveData == null) {
+            savedBookingsLiveData = new MutableLiveData<>();
+        }
+
+        return savedBookingsLiveData;
+    }
+
     public void saveBookings(List<BookingModel> bookingModels, long unixTimestamp) {
 
         Date date = new Date(unixTimestamp);
@@ -112,5 +123,6 @@ public class ThirdFragmentViewModel extends ViewModel {
             dbRef.child(bookingModel.getKey()).setValue(bookingModel);
         }
 
+        savedBookingsLiveData.postValue(true);
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,12 +51,11 @@ public class AvailableBusAdapter<T> extends FirebaseRecyclerAdapter<T, Available
         holder.model.setText(v.getModel());
         holder.regNumber.setText(v.getRegistrationNumber());
 
-        if (lastPos == position) {
-            holder.root.setBackgroundColor(Color.WHITE);
-        }
+        holder.root.setBackgroundColor(Color.WHITE);
         if (currentPos == position) {
             holder.root.setBackgroundColor(Color.parseColor("#C1C1C1"));
         }
+
     }
 
     private void changeColor() {
@@ -117,6 +117,7 @@ public class AvailableBusAdapter<T> extends FirebaseRecyclerAdapter<T, Available
             if (AvailableBusAdapter.weakReference.get() == null) {
                 return;
             }
+            weakReference.get().lastPos = weakReference.get().currentPos;
             weakReference.get().currentPos = getAdapterPosition();
 
             if (optionListener != null) {
@@ -125,7 +126,6 @@ public class AvailableBusAdapter<T> extends FirebaseRecyclerAdapter<T, Available
             }
 
             weakReference.get().changeColor();
-            weakReference.get().lastPos = getAdapterPosition();
         }
 
     }

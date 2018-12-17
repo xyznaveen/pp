@@ -1,8 +1,6 @@
 package np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import java.lang.ref.WeakReference;

@@ -7,11 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,17 +46,22 @@ public class SecondFragment extends BasePageFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_second, container, false);
     }
 
+    private ProgressBar progressBar;
+    private RecyclerView recyclerView;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        progressBar = view.findViewById(R.id.fsProgress);
+        recyclerView = view.findViewById(R.id.fsVehicleList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         initViews();
     }
 
@@ -69,9 +74,13 @@ public class SecondFragment extends BasePageFragment {
             parentWeakReference.get().getViewModel().observeDataChanges()
                     .observe(this, bundle -> {
 
-                        if (bundle != null) {
+                        if (bundle != null
+                                && FirstFragment.getClassName().equals(bundle.getString(SENDER))) {
+
+                            progressBar.setVisibility(View.VISIBLE);
                             vehiceInfo = bundle;
                             fetchMatchingVehicles(bundle);
+                            return;
                         }
                     });
         }
@@ -100,8 +109,6 @@ public class SecondFragment extends BasePageFragment {
             adapter.startListening();
         }
 
-        RecyclerView recyclerView = view.findViewById(R.id.fsVehicleList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getView().getContext()));
         recyclerView.setAdapter(adapter);
 
         adapter.setBusSelectedListener((position, model) -> {
@@ -110,9 +117,14 @@ public class SecondFragment extends BasePageFragment {
             vehiceInfo = bookingConfiguration;
             vehiceInfo.putString(VEHICLE_KEY, model.getKey());
             vehiceInfo.putString(USER_KEY, auth.getUid());
-            parentWeakReference.get().getViewModel().addData(vehiceInfo);
 
+            adapter.notifyItemChanged(position);
             enableButton();
+        });
+
+        adapter.setDataFetchCompleteListener(dataCount -> {
+            recyclerView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
         });
     }
 
@@ -158,7 +170,10 @@ public class SecondFragment extends BasePageFragment {
 
             if (parentWeakReference.get() != null) {
 
-                vehiceInfo.putString(BasePageFragment.FROM, getClassName());
+                // add bundle to view model
+                parentWeakReference.get().getViewModel().addData(vehiceInfo);
+
+                vehiceInfo.putString(BasePageFragment.FROM, SecondFragment.getClassName());
                 parentWeakReference.get().nextPage(vehiceInfo);
             }
         });

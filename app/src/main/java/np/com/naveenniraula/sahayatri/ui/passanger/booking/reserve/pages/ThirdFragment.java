@@ -30,7 +30,9 @@ import np.com.naveenniraula.sahayatri.data.model.BookingModel;
 import np.com.naveenniraula.sahayatri.data.model.SeatModel;
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.BookVehicleFragment;
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.adapter.BusSeatAdapter;
+import np.com.naveenniraula.sahayatri.ui.passanger.payment.PaymentDialog;
 import np.com.naveenniraula.sahayatri.util.Constants;
+import np.com.naveenniraula.sahayatri.util.MessageHelper;
 
 import static np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages.SecondFragment.VEHICLE_KEY;
 
@@ -83,9 +85,10 @@ public class ThirdFragment extends BasePageFragment {
             parentWeakReference.get().getViewModel().observeDataChanges()
                     .observe(this, bundle -> {
 
-                        Log.i("BQ7CH72", "ThirdFragment data change observed. \n Bundle contents::: " + bundle);
+
                         if (bundle != null) {
 
+                            Log.i("BQ7CH72", "Third fragment!" + bundle.getString(SENDER));
                             this.bundle = bundle;
 
                             if (bundle.containsKey(VEHICLE_KEY)
@@ -97,11 +100,11 @@ public class ThirdFragment extends BasePageFragment {
                     });
         }
 
+
         viewModel.observeVehicleData().observe(this, value -> {
 
             if (value != null && adapter.getItemCount() == 0) {
 
-                Log.i("BQ7CH72", "Seat Created From Scratch.");
                 adapter.add(prepareSeat(value.getTotalSeatCount()));
             }
         });
@@ -119,8 +122,17 @@ public class ThirdFragment extends BasePageFragment {
                 return;
             }
 
-            Log.i("BQ7CH72", "Booking info exists so created from the provided information.");
             adapter.add(prepareSeat(value));
+        });
+
+        viewModel.observeSaveBookings().observe(this, aBoolean -> {
+
+            if (aBoolean) {
+
+                // change to last page.
+                nextPage(bundle);
+            }
+
         });
     }
 
@@ -200,10 +212,14 @@ public class ThirdFragment extends BasePageFragment {
     private void startFetchingInfo() {
 
         String vehicleKey = bundle.getString(VEHICLE_KEY);
-        Log.i("BQ7CH72", "Fetching for vehicle :: " + vehicleKey);
-        long unixTimestamp = bundle.getLong(BasePageFragment.DATE);
-        Log.i("BQ7CH72", "Fetching for vehicle :: " + unixTimestamp);
-        viewModel.fetchBooking(vehicleKey, unixTimestamp);
+        if (vehicleKey != null) {
+
+            long unixTimestamp = bundle.getLong(BasePageFragment.DATE);
+            viewModel.fetchBooking(vehicleKey, unixTimestamp);
+        } else {
+            MessageHelper.showErrorSnack(this, "We could not identify the vehicle. " +
+                    "Please try to book the seat again.");
+        }
     }
 
     private BusSeatAdapter adapter;
@@ -212,6 +228,7 @@ public class ThirdFragment extends BasePageFragment {
 
         View view = getView();
         if (view == null) {
+            MessageHelper.showErrorSnack(this, "An unexpected error occurred. Please try again later.");
             return;
         }
 
@@ -241,13 +258,14 @@ public class ThirdFragment extends BasePageFragment {
             long unixTimestamp = bundle.getLong(BasePageFragment.DATE);
             viewModel.saveBookings(prepareForSeatInsertion(), unixTimestamp);
 
-            showPaymentDialog();
-
         });
     }
 
     private void showPaymentDialog() {
 
+        PaymentDialog paymentDialog = new PaymentDialog();
+        paymentDialog.setCancelable(false);
+        paymentDialog.show(getChildFragmentManager(), paymentDialog.getTag());
     }
 
     private List<BookingModel> prepareForSeatInsertion() {

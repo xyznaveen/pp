@@ -11,7 +11,7 @@ public class PageChangeViewModel extends ViewModel {
 
     public MutableLiveData<Bundle> observeDataChanges() {
 
-        if(data ==null) {
+        if (data == null) {
             data = new MutableLiveData<>();
         }
 
@@ -20,7 +20,6 @@ public class PageChangeViewModel extends ViewModel {
 
     public void addData(Bundle bundle) {
 
-        Log.i("BQ7CH72", "Data added to parent view model.");
         data.postValue(bundle);
     }
 

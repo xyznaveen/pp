@@ -32,7 +32,7 @@ public class OnlinePaymentLoginFragment extends OpayBaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initVIews();
+        //initVIews();
     }
 
     private void initVIews() {
