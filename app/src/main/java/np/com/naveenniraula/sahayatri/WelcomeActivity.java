@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import np.com.naveenniraula.sahayatri.ui.login.LoginFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.OwnerDashboardActivity;
 import np.com.naveenniraula.sahayatri.ui.passanger.PassangerDashboardActivity;
+import np.com.naveenniraula.sahayatri.util.PreferenceUtil;
 
 public class WelcomeActivity extends BaseActivity {
 
@@ -49,11 +50,25 @@ public class WelcomeActivity extends BaseActivity {
         if (savedInstanceState == null) {
             if (mAuth.getCurrentUser() != null) {
 
-                new Thread(() -> startActivity(new Intent(WelcomeActivity.this, PassangerDashboardActivity.class))).start();
+                PreferenceUtil pref = new PreferenceUtil(this);
+                if (pref.getString(LoginFragment.USER_TYPE)
+                        .equals(LoginFragment.PASSANGER)) {
+
+                    startActivity(
+                            new Intent(WelcomeActivity.this,
+                                    PassangerDashboardActivity.class));
+                } else if (pref.getString(LoginFragment.USER_TYPE)
+                        .equals(LoginFragment.VEHICLE_OWNER)) {
+
+                    startActivity(
+                            new Intent(WelcomeActivity.this,
+                                    OwnerDashboardActivity.class));
+                }
             } else {
 
                 replaceFragment(LoginFragment.newInstance());
-                getSupportFragmentManager().addOnBackStackChangedListener(backStackChangedListener);
+                getSupportFragmentManager()
+                        .addOnBackStackChangedListener(backStackChangedListener);
             }
         }
     }

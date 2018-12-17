@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.owner.vehicles.MyVehiclesFragment">
+    tools:context=".ui.owner.vehicles.add.AddVehicleFragment">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/mvfRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -14,9 +15,9 @@
             android:id="@+id/mvfModel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
             android:hint="Model"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +33,7 @@
             android:id="@+id/mvfRegistrationNumber"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:hint="Registration Number"
             app:layout_constraintEnd_toEndOf="@+id/mvfModel"
             app:layout_constraintStart_toStartOf="@+id/mvfModel"
@@ -48,7 +49,7 @@
             android:id="@+id/mvfTotalSeatCount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:hint="Total Seat Count"
             app:layout_constraintEnd_toEndOf="@+id/mvfRegistrationNumber"
             app:layout_constraintStart_toStartOf="@+id/mvfRegistrationNumber"
@@ -64,7 +65,7 @@
             android:id="@+id/mvfCrewCount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:hint="Crew Count"
             app:layout_constraintEnd_toEndOf="@+id/mvfTotalSeatCount"
             app:layout_constraintStart_toStartOf="@+id/mvfTotalSeatCount"
@@ -82,12 +83,49 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:text="Save Vehicle Info"
+            android:text="Add Vehicle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/mvfCrewCount"
             app:layout_constraintStart_toStartOf="@+id/mvfCrewCount"
-            app:layout_constraintTop_toBottomOf="@+id/mvfCrewCount"
+            app:layout_constraintTop_toBottomOf="@+id/mvfBustType"
             app:layout_constraintVertical_bias="1.0" />
+
+        <RadioGroup
+            android:id="@+id/mvfBustType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/mvfCrewCount"
+            app:layout_constraintStart_toStartOf="@+id/mvfCrewCount"
+            app:layout_constraintTop_toBottomOf="@+id/textView21">
+
+            <RadioButton
+                android:id="@+id/mvfbtNight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:padding="8dp"
+                android:text="Night" />
+
+            <RadioButton
+                android:id="@+id/mvfbtDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:text="Day" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Operation Mode"
+            app:layout_constraintEnd_toEndOf="@+id/mvfCrewCount"
+            app:layout_constraintStart_toStartOf="@+id/mvfCrewCount"
+            app:layout_constraintTop_toBottomOf="@+id/mvfCrewCount" />
 
     </android.support.constraint.ConstraintLayout>
 

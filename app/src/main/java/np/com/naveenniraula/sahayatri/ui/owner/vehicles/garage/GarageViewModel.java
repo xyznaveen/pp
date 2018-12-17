@@ -1,4 +1,4 @@
-package np.com.naveenniraula.sahayatri.ui.owner.vehicles.detail;
+package np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -13,13 +13,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import np.com.naveenniraula.sahayatri.data.model.Vehicle;
-import np.com.naveenniraula.sahayatri.ui.owner.vehicles.adapter.VehicleAdapter;
+import np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage.adapter.VehicleAdapter;
 
-public class VehicleDetailViewModel extends AndroidViewModel {
+public class GarageViewModel extends AndroidViewModel {
 
     private MutableLiveData<Boolean> fetchStatusLive;
 
-    public VehicleDetailViewModel(@NonNull Application application) {
+    public GarageViewModel(@NonNull Application application) {
         super(application);
     }
 
@@ -35,7 +35,12 @@ public class VehicleDetailViewModel extends AndroidViewModel {
     private void fetchDataFromFirebase() {
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        Query query = FirebaseDatabase.getInstance().getReference().child("vehicles/" + auth.getUid()).orderByKey();
+        Query query = FirebaseDatabase.getInstance().getReference()
+                .child("VehicleList")
+                .startAt(auth.getUid(), "vehicleOwnerKey")
+                .endAt(auth.getUid(), "vehicleOwnerKey")
+                .orderByKey();
+
         FirebaseRecyclerOptions<Vehicle> options =
                 new FirebaseRecyclerOptions.Builder<Vehicle>()
                         .setQuery(query, Vehicle.class)

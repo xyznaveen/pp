@@ -1,61 +1,112 @@
 package np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import java.util.ArrayList;
+import java.util.List;
 
 import np.com.naveenniraula.sahayatri.R;
+import np.com.naveenniraula.sahayatri.data.model.SeatModel;
+import np.com.naveenniraula.sahayatri.util.Constants;
 
-/**
- * Created by Naveen Niraula @ 12/12/18 : 9:07 PM
- * This file cannot be modified without written consent of Naveen Niraula
- * <p>
- * But may be reproduced if the author intends no benefit from it and wants
- * to contribute to open source.
- **/
-public class BusSeatAdapter<T> extends FirebaseRecyclerAdapter<T, BusSeatAdapter.BusSeatAdapterViewHolder> {
+public class BusSeatAdapter extends RecyclerView.Adapter<BusSeatAdapter.ViewHolder> {
 
-    private final Context ctx;
+    private List<SeatModel> seatModelList;
 
-    public BusSeatAdapter(@NonNull FirebaseRecyclerOptions options, Context ctx) {
-        super(options);
-        this.ctx = ctx;
-    }
-
-    @Override
-    protected void onBindViewHolder(@NonNull BusSeatAdapterViewHolder holder, int position, @NonNull T model) {
+    public BusSeatAdapter() {
+        seatModelList = new ArrayList<>();
     }
 
     @NonNull
     @Override
-    public BusSeatAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.item_vehicle, viewGroup, false);
-        return new BusSeatAdapterViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
+        View view = layoutInflater.inflate(R.layout.item_vehicle_seat, viewGroup, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onDataChanged() {
-        super.onDataChanged();
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+
+        final SeatModel itrModel = seatModelList.get(i);
+
+        viewHolder.seatName.setText(
+                itrModel.isSeat()
+                        ? itrModel.getSeatIdentifier()
+                        : ""
+        );
+        viewHolder.setBusSeatClickListener(busSeatClickListener);
+        viewHolder.root.setBackgroundColor(itrModel.getBackgroundColor());
     }
 
-    static class BusSeatAdapterViewHolder
-            extends RecyclerView.ViewHolder
+    private BusSeatClickListener busSeatClickListener = position -> {
+
+        SeatModel sm = seatModelList.get(position);
+
+        if (sm.isAvailable() && sm.isSeat()) {
+
+            int color = sm.isSelected()
+                    ? Constants.SELECTED_COLOR
+                    : Constants.SEAT_COLOR;
+
+            sm.setSelected(!sm.isSelected());
+            seatModelList.set(position, sm);
+            sm.setBackgroundColor(color);
+
+            notifyItemChanged(position);
+        }
+    };
+
+    @Override
+    public int getItemCount() {
+        return seatModelList.size();
+    }
+
+    public void add(List<SeatModel> seatList) {
+
+        seatModelList.clear();
+        notifyDataSetChanged();
+        seatModelList.addAll(seatList);
+        notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        BusSeatAdapterViewHolder(@NonNull View itemView) {
+        private BusSeatClickListener listener;
+        ConstraintLayout root;
+        TextView seatName;
+
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            root = itemView.findViewById(R.id.ivsRoot);
+            seatName = itemView.findViewById(R.id.ivsName);
+            root.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
+
+            listener.seatClicked(getAdapterPosition());
+        }
+
+        void setBusSeatClickListener(BusSeatClickListener listener) {
+            this.listener = listener;
         }
     }
 
+    interface BusSeatClickListener {
+        void seatClicked(int position);
+    }
+
+    public List<SeatModel> getSeatModelList() {
+        return seatModelList;
+    }
 }

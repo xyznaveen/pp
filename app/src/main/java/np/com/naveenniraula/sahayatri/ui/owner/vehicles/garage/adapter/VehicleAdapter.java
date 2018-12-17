@@ -1,4 +1,4 @@
-package np.com.naveenniraula.sahayatri.ui.owner.vehicles.adapter;
+package np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -56,7 +56,10 @@ public class VehicleAdapter<T> extends FirebaseRecyclerAdapter<T, VehicleAdapter
     public void onDataChanged() {
         super.onDataChanged();
 
-        dataFetchCompleteListener.onDataFetch(getItemCount());
+        if (dataFetchCompleteListener != null) {
+
+            dataFetchCompleteListener.onDataFetch(getItemCount());
+        }
     }
 
     public void setOptionListener(OptionsCallbackInterface optionListener) {
@@ -88,7 +91,10 @@ public class VehicleAdapter<T> extends FirebaseRecyclerAdapter<T, VehicleAdapter
                 return;
             }
 
-            optionListener.onOptionClicked(getAdapterPosition(), (Vehicle) (VehicleAdapter.weakReference.get().getItem(getAdapterPosition())));
+            if (optionListener != null) {
+                optionListener.onOptionClicked(getAdapterPosition(),
+                        (Vehicle) (VehicleAdapter.weakReference.get().getItem(getAdapterPosition())));
+            }
         }
     }
 

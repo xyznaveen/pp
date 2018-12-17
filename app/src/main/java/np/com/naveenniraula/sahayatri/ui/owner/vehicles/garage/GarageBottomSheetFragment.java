@@ -1,4 +1,4 @@
-package np.com.naveenniraula.sahayatri.ui.owner.vehicles.detail;
+package np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage;
 
 
 import android.os.Bundle;
@@ -13,9 +13,9 @@ import np.com.naveenniraula.sahayatri.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VdBottomSheetFragment extends BottomSheetDialogFragment {
+public class GarageBottomSheetFragment extends BottomSheetDialogFragment {
 
-    public VdBottomSheetFragment() {
+    public GarageBottomSheetFragment() {
         // Required empty public constructor
     }
 

@@ -116,7 +116,7 @@ public class RegisterFragment extends BaseFragment
         user.setEmail(email.getEditText().getText().toString());
         user.setPassword(password.getEditText().getText().toString());
         user.setName(fullName.getEditText().getText().toString());
-        user.setPhoneNumber(phone.getEditText().getText().toString());
+        user.setPhoneNumber(Long.parseLong(phone.getEditText().getText().toString()));
         user.setRegistrationDate(System.currentTimeMillis());
         user.setUserType(USER_TYPE);
 
