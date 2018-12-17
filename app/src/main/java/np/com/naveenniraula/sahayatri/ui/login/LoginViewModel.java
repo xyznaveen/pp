@@ -77,6 +77,8 @@ public class LoginViewModel extends ViewModel {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+
+            Log.i("BQ7CH72", "Snapshot :: " + dataSnapshot.getValue(UserEntity.class));
             if (dataSnapshot.getValue() != null) {
 
                 userDetailLiveData.postValue(dataSnapshot.getValue(UserEntity.class));
@@ -97,6 +99,9 @@ public class LoginViewModel extends ViewModel {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String userId = firebaseAuth.getUid();
 
+        Log.i("BQ7CH72", "User id ::  " + userId);
+        Log.i("BQ7CH72", "User type ::  " + mutableLiveData.getValue());
+
         if (userId == null) {
 
             Log.i("BQ7CH72", "User was not authenticated");
@@ -113,6 +118,15 @@ public class LoginViewModel extends ViewModel {
             userDetailLiveData.postValue(null);
             return;
         }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String str :
+                userType.split(" ")) {
+
+            stringBuilder.append(str);
+        }
+
+        userType = stringBuilder.toString();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReference().child(userType).child(firebaseAuth.getUid());

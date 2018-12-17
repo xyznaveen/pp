@@ -15,7 +15,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:text="Desired Travel Mode"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -31,22 +30,21 @@
             android:text="From"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/spinner"
-            app:layout_constraintStart_toStartOf="@+id/spinner"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+            app:layout_constraintEnd_toEndOf="@+id/ffTo"
+            app:layout_constraintStart_toStartOf="@+id/ffTo"
+            app:layout_constraintTop_toBottomOf="@+id/ffTo" />
 
         <TextView
             android:id="@+id/textView17"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:text="Date"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/textView13"
             app:layout_constraintStart_toStartOf="@+id/textView15"
-            app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+            app:layout_constraintTop_toBottomOf="@+id/ffFrom" />
 
         <TextView
             android:id="@+id/textView12"
@@ -66,7 +64,7 @@
             app:layout_constraintVertical_bias="0.22000003" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/ffTo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -76,7 +74,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
         <Spinner
-            android:id="@+id/spinner2"
+            android:id="@+id/ffFrom"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -117,10 +115,10 @@
             android:layout_marginBottom="16dp"
             android:text="Search Vehicle"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/spinner2"
+            app:layout_constraintEnd_toEndOf="@+id/ffFrom"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/spinner2"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+            app:layout_constraintStart_toStartOf="@+id/ffFrom"
+            app:layout_constraintTop_toBottomOf="@+id/ffTravelMode" />
 
         <TextView
             android:id="@+id/textView16"
@@ -150,7 +148,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
         <RadioGroup
-            android:id="@+id/radioGroup"
+            android:id="@+id/ffTravelMode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -160,19 +158,32 @@
             app:layout_constraintTop_toBottomOf="@+id/textView22">
 
             <RadioButton
-                android:id="@+id/radioButton"
+                android:id="@+id/fftmDay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Day Time" />
+                android:checked="true"
+                android:text="Day" />
 
             <RadioButton
-                android:id="@+id/radioButton2"
+                android:id="@+id/fftmNight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Night Time" />
+                android:text="Night" />
         </RadioGroup>
+
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2 weeks from now"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@+id/textView18"
+            app:layout_constraintEnd_toEndOf="@+id/textView17"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/textView12"
+            app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
     </android.support.constraint.ConstraintLayout>
 

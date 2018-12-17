@@ -1,6 +1,7 @@
 package np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,13 +15,15 @@ import np.com.naveenniraula.sahayatri.components.NoSwipeViewPager;
 import np.com.naveenniraula.sahayatri.ui.passanger.BaseFragment;
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.adapter.NewBookingAdapter;
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages.FirstFragment;
+import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages.FourthFragment;
+import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages.PageChangeViewModel;
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages.SecondFragment;
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages.ThirdFragment;
-import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages.FourthFragment;
 
 public class BookVehicleFragment extends BaseFragment {
 
     private BookVehicleViewModel mViewModel;
+    private PageChangeViewModel viewModel;
 
     public static BookVehicleFragment newInstance() {
         return new BookVehicleFragment();
@@ -51,6 +54,7 @@ public class BookVehicleFragment extends BaseFragment {
 
         viewPager = view.findViewById(R.id.bvfNewBooking);
         viewPager.setAdapter(nba);
+        viewPager.setOffscreenPageLimit(0);
     }
 
     public ViewPager getViewPager() {
@@ -58,13 +62,18 @@ public class BookVehicleFragment extends BaseFragment {
         return viewPager;
     }
 
-    public void nextPage() {
+    public void nextPage(Bundle data) {
 
         int pageNumber = viewPager.getCurrentItem() + 1 >= nba.getCount()
                 ? nba.getCount()
                 : viewPager.getCurrentItem() + 1;
 
+        if (data != null) {
+            nba.setBundleFor(pageNumber, data);
+        }
+
         viewPager.setCurrentItem(pageNumber, true);
+        viewModel.addData(data);
     }
 
     public void prevPage() {
@@ -80,6 +89,7 @@ public class BookVehicleFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(BookVehicleViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(PageChangeViewModel.class);
         // TODO: Use the ViewModel
     }
 
@@ -110,4 +120,7 @@ public class BookVehicleFragment extends BaseFragment {
 
     }
 
+    public PageChangeViewModel getViewModel() {
+        return viewModel;
+    }
 }

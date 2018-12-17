@@ -1,28 +1,42 @@
-package np.com.naveenniraula.sahayatri.ui.owner.vehicles;
+package np.com.naveenniraula.sahayatri.ui.owner.vehicles.add;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.RadioGroup;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.data.model.Vehicle;
 import np.com.naveenniraula.sahayatri.ui.owner.BaseFragment;
 import np.com.naveenniraula.sahayatri.util.InputHelper;
+import np.com.naveenniraula.sahayatri.util.MessageHelper;
 import np.com.naveenniraula.sahayatri.util.validation.Rectify;
 
-public class MyVehiclesFragment extends BaseFragment {
+public class AddVehicleFragment extends BaseFragment {
 
-    private MyVehiclesViewModel mViewModel;
+    public static final String DAY_BUS = "Day";
+    public static final String NIGHT_BUS = "Night";
+    private static final String EMPTY = "";
 
-    public static MyVehiclesFragment newInstance() {
-        return new MyVehiclesFragment();
+    private AddVehicleViewModel mViewModel;
+
+    public static AddVehicleFragment newInstance() {
+        return new AddVehicleFragment();
     }
 
     @Override
@@ -37,6 +51,25 @@ public class MyVehiclesFragment extends BaseFragment {
 
         changeTitle(R.string.title_garage);
 
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        dbRef.child("VehicleList")
+                .child("Day")
+                .child(FirebaseAuth.getInstance().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        
+                        Log.i("BQ7CH72", "Databe");
+                        
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
         attachListeners();
     }
 
@@ -45,7 +78,7 @@ public class MyVehiclesFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         changeTitle(R.string.title_owner_vehicles);
-        mViewModel = ViewModelProviders.of(this).get(MyVehiclesViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(AddVehicleViewModel.class);
     }
 
     private void attachListeners() {
@@ -71,15 +104,39 @@ public class MyVehiclesFragment extends BaseFragment {
 
                         if (aBoolean != null && aBoolean) {
 
-                            Toast.makeText(getContext(), "Vehicle added successfully.", Toast.LENGTH_SHORT).show();
+                            clearInput();
+                            MessageHelper.regularSnack(this, "Vehicle has been added.");
                             return;
                         }
 
-                        Toast.makeText(getContext(), "Could Not Create New Vehicle.", Toast.LENGTH_SHORT).show();
-
+                        MessageHelper.showErrorSnack(this, "Something went wrong while adding vehicle.");
                     });
         }
 
+    }
+
+    private void clearInput() {
+
+        if (getView() == null) {
+            return;
+        }
+
+        ConstraintLayout constraintLayout = getView().findViewById(R.id.mvfRoot);
+        TextInputLayout inputItem;
+
+        for (int i = 0; i < constraintLayout.getChildCount(); i++) {
+
+            if (constraintLayout.getChildAt(i) instanceof TextInputLayout) {
+
+                inputItem = (TextInputLayout) constraintLayout.getChildAt(i);
+
+                if (inputItem.getEditText() != null) {
+
+                    inputItem.getEditText().setText(EMPTY);
+                }
+            }
+
+        }
     }
 
     private Vehicle prepareModel() {
@@ -92,11 +149,20 @@ public class MyVehiclesFragment extends BaseFragment {
         TextInputLayout seatCount = getView().findViewById(R.id.mvfTotalSeatCount);
         TextInputLayout crewCount = getView().findViewById(R.id.mvfCrewCount);
 
+        RadioGroup busType = getView().findViewById(R.id.mvfBustType);
+
         vehicle.setModel(InputHelper.getString(model));
-        vehicle.setRegistrationNumber(InputHelper.getString(reg));
+        vehicle.setRegistrationNumber(InputHelper.getStringAllCaps(reg));
         vehicle.setTotalSeatCount(Integer.parseInt(InputHelper.getString(seatCount)));
         vehicle.setTotalCrewCount(Integer.parseInt(InputHelper.getString(crewCount)));
+        vehicle.setOperationMode(
+                busType.getCheckedRadioButtonId() == R.id.mvfbtNight
+                        ? NIGHT_BUS
+                        : DAY_BUS
+        );
 
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        vehicle.setVehicleOwnerKey(auth.getUid());
         return vehicle;
     }
 

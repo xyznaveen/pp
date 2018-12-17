@@ -18,11 +18,13 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.List;
+
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.WelcomeActivity;
 import np.com.naveenniraula.sahayatri.ui.owner.booking.BookingStatusFragment;
-import np.com.naveenniraula.sahayatri.ui.owner.vehicles.MyVehiclesFragment;
-import np.com.naveenniraula.sahayatri.ui.owner.vehicles.detail.VehicleDetailFragment;
+import np.com.naveenniraula.sahayatri.ui.owner.vehicles.add.AddVehicleFragment;
+import np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage.GarageFragment;
 
 public class OwnerDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,17 +51,24 @@ public class OwnerDashboardActivity extends AppCompatActivity
 
         changeTitle(R.string.title_vehicle_owner);
 
-        replaceFragment(MyVehiclesFragment.newInstance());
+        replaceFragment(AddVehicleFragment.newInstance());
     }
 
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+            return;
         }
+
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments.size() <= 1) {
+            return;
+        }
+
+        super.onBackPressed();
     }
 
     @Override
@@ -78,6 +87,9 @@ public class OwnerDashboardActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            replaceFragment(AddVehicleFragment.newInstance());
+
             return true;
         }
 
@@ -92,7 +104,7 @@ public class OwnerDashboardActivity extends AppCompatActivity
 
         if (id == R.id.nav_owner_status) {
 
-            replaceFragment(VehicleDetailFragment.newInstance());
+            replaceFragment(GarageFragment.newInstance());
         } else if (id == R.id.nav_owner_booking_status) {
 
             replaceFragment(BookingStatusFragment.newInstance());

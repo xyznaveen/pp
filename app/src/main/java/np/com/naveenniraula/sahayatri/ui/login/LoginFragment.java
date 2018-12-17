@@ -40,7 +40,7 @@ import np.com.naveenniraula.sahayatri.util.ValidationUtil;
 public class LoginFragment extends BaseFragment
         implements View.OnClickListener {
 
-    private static final String USER_TYPE = "userType";
+    public static final String USER_TYPE = "userType";
     private LoginViewModel mViewModel;
     private Button actionVehicleOwner;
     private Button actionPassanger;
@@ -199,21 +199,26 @@ public class LoginFragment extends BaseFragment
                     // if passenger was selected and fetched data was null
                     // the user must be vehicle owner
                     // because the query never returns null if value found in database
+                    mViewModel.setUserType(VEHICLE_OWNER);
                     startActivity(OwnerDashboardActivity.class);
                     return;
                 }
 
+                mViewModel.setUserType(PASSANGER);
                 startActivity(PassangerDashboardActivity.class);
+
                 return;
             }
 
             if (pf.getString(USER_TYPE).equals(PASSANGER)) {
 
                 // the user is passenger because the data was not null
+                mViewModel.setUserType(PASSANGER);
                 startActivity(PassangerDashboardActivity.class);
                 return;
             }
 
+            mViewModel.setUserType(VEHICLE_OWNER);
             startActivity(OwnerDashboardActivity.class);
         });
 

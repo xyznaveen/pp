@@ -6,26 +6,37 @@ import np.com.naveenniraula.sahayatri.util.MessageHelper;
 
 public class Vehicle {
 
+    private String key;
     private String model;
     private String registrationNumber;
     private int totalSeatCount;
     private int totalCrewCount;
     private String vehicleHash;
+    private String operationMode;
+    private String vehicleOwnerKey;
 
     public Vehicle() {
     }
 
-    public Vehicle(
-            String model,
-            String registrationNumber,
-            int totalSeatCount,
-            int totalCrewCount
-    ) {
+    public Vehicle(String model, String registrationNumber,
+                   int totalSeatCount, int totalCrewCount,
+                   String vehicleHash, String operationMode, String vehicleOwnerKey) {
 
         this.model = model;
         this.registrationNumber = registrationNumber;
         this.totalSeatCount = totalSeatCount;
         this.totalCrewCount = totalCrewCount;
+        this.vehicleHash = vehicleHash;
+        this.operationMode = operationMode;
+        this.vehicleOwnerKey = vehicleOwnerKey;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getModel() {
@@ -76,4 +87,23 @@ public class Vehicle {
         return true;
     }
 
+    public void setVehicleHash(String vehicleHash) {
+        this.vehicleHash = vehicleHash;
+    }
+
+    public String getOperationMode() {
+        return operationMode;
+    }
+
+    public void setOperationMode(String operationMode) {
+        this.operationMode = operationMode;
+    }
+
+    public String getVehicleOwnerKey() {
+        return vehicleOwnerKey;
+    }
+
+    public void setVehicleOwnerKey(String vehicleOwnerKey) {
+        this.vehicleOwnerKey = vehicleOwnerKey;
+    }
 }
