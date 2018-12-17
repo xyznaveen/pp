@@ -1,10 +1,8 @@
 package np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.adapter;
 
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +13,7 @@ import java.util.List;
 
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.data.model.SeatModel;
+import np.com.naveenniraula.sahayatri.util.Constants;
 
 public class BusSeatAdapter extends RecyclerView.Adapter<BusSeatAdapter.ViewHolder> {
 
@@ -32,41 +31,34 @@ public class BusSeatAdapter extends RecyclerView.Adapter<BusSeatAdapter.ViewHold
         return new ViewHolder(view);
     }
 
-    int skipAt = 2;
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
         final SeatModel itrModel = seatModelList.get(i);
-        if (itrModel.isSelected()) {
-            viewHolder.root.setBackgroundColor(Color.parseColor("#1565c0"));
-        } else {
-            viewHolder.root.setBackgroundColor(Color.parseColor("#008577"));
-        }
 
-        if (skipAt == i) {
-
-            if (skipAt > 2) {
-                viewHolder.root.setBackgroundColor(Color.parseColor("#f1f1f1"));
-            } else {
-                viewHolder.setBusSeatClickListener(lstner);
-            }
-            skipAt += 5;
-            return;
-        }
-
-        viewHolder.seatName.setText(itrModel.getSeatNumber());
-        viewHolder.setBusSeatClickListener(lstner);
+        viewHolder.seatName.setText(
+                itrModel.isSeat()
+                        ? itrModel.getSeatIdentifier()
+                        : ""
+        );
+        viewHolder.setBusSeatClickListener(busSeatClickListener);
+        viewHolder.root.setBackgroundColor(itrModel.getBackgroundColor());
     }
 
-    private BusSeatClickListener lstner = position -> {
+    private BusSeatClickListener busSeatClickListener = position -> {
 
         SeatModel sm = seatModelList.get(position);
 
-        if (sm.isAvailable()) {
-            sm.setBackgroundColor(Color.BLUE);
+        if (sm.isAvailable() && sm.isSeat()) {
+
+            int color = sm.isSelected()
+                    ? Constants.SELECTED_COLOR
+                    : Constants.SEAT_COLOR;
+
             sm.setSelected(!sm.isSelected());
             seatModelList.set(position, sm);
+            sm.setBackgroundColor(color);
+
             notifyItemChanged(position);
         }
     };
@@ -78,7 +70,6 @@ public class BusSeatAdapter extends RecyclerView.Adapter<BusSeatAdapter.ViewHold
 
     public void add(List<SeatModel> seatList) {
 
-        Log.i("BQ7CH72", "Calleed addddddd again.");
         seatModelList.clear();
         notifyDataSetChanged();
         seatModelList.addAll(seatList);
@@ -92,7 +83,7 @@ public class BusSeatAdapter extends RecyclerView.Adapter<BusSeatAdapter.ViewHold
         ConstraintLayout root;
         TextView seatName;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             root = itemView.findViewById(R.id.ivsRoot);
@@ -106,7 +97,7 @@ public class BusSeatAdapter extends RecyclerView.Adapter<BusSeatAdapter.ViewHold
             listener.seatClicked(getAdapterPosition());
         }
 
-        public void setBusSeatClickListener(BusSeatClickListener listener) {
+        void setBusSeatClickListener(BusSeatClickListener listener) {
             this.listener = listener;
         }
     }

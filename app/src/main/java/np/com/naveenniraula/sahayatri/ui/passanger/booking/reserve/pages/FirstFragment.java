@@ -100,7 +100,7 @@ public class FirstFragment extends BasePageFragment {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH, month);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
             travelOptions.putLong(BasePageFragment.DATE, calendar.getTimeInMillis());
 

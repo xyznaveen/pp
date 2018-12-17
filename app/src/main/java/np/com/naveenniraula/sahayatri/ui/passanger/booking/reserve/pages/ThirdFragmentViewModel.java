@@ -33,9 +33,9 @@ public class ThirdFragmentViewModel extends ViewModel {
         return bookingLiveData;
     }
 
-    public void fetchBooking(@NonNull String vehicleId) {
+    public void fetchBooking(@NonNull String vehicleId, long unixTimestamp) {
 
-        Date date = new Date(System.currentTimeMillis());
+        Date date = new Date(unixTimestamp);
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMMyyyy", Locale.US);
 
         DatabaseReference dbRef = FirebaseDatabase.getInstance()
@@ -96,9 +96,9 @@ public class ThirdFragmentViewModel extends ViewModel {
         });
     }
 
-    public void saveBookings(List<BookingModel> bookingModels) {
+    public void saveBookings(List<BookingModel> bookingModels, long unixTimestamp) {
 
-        Date date = new Date(System.currentTimeMillis());
+        Date date = new Date(unixTimestamp);
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMMyyyy", Locale.US);
 
         String parentNode = sdf.format(date).toUpperCase();

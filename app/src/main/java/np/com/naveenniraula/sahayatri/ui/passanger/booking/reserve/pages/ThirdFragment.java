@@ -2,7 +2,6 @@ package np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages;
 
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,6 +30,7 @@ import np.com.naveenniraula.sahayatri.data.model.BookingModel;
 import np.com.naveenniraula.sahayatri.data.model.SeatModel;
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.BookVehicleFragment;
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.adapter.BusSeatAdapter;
+import np.com.naveenniraula.sahayatri.util.Constants;
 
 import static np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages.SecondFragment.VEHICLE_KEY;
 
@@ -72,8 +72,6 @@ public class ThirdFragment extends BasePageFragment {
         registerListeners();
     }
 
-    private boolean fetchedOnce = false;
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -92,6 +90,7 @@ public class ThirdFragment extends BasePageFragment {
 
                             if (bundle.containsKey(VEHICLE_KEY)
                                     && bundle.containsKey(TRAVEL_MODE)) {
+
                                 startFetchingInfo();
                             }
                         }
@@ -120,12 +119,8 @@ public class ThirdFragment extends BasePageFragment {
                 return;
             }
 
-            if (!fetchedOnce) {
-
-                Log.i("BQ7CH72", "Booking info exists so created from the provided information.");
-                adapter.add(prepareSeat(value));
-                fetchedOnce = true;
-            }
+            Log.i("BQ7CH72", "Booking info exists so created from the provided information.");
+            adapter.add(prepareSeat(value));
         });
     }
 
@@ -133,17 +128,37 @@ public class ThirdFragment extends BasePageFragment {
 
         final List<SeatModel> seatModelList = new ArrayList<>();
 
+        int skipSeat = 2;
+        for (int i = 0; i < value.size(); i++) {
 
-        for (BookingModel model :
-                value) {
+            boolean isThisaSeat = i != skipSeat;
+            int bgCol = (i == skipSeat && i != 2)
+                    ? Constants.DISABLED_COLOR
+                    : Constants.SEAT_COLOR;
+
+            skipSeat = i == skipSeat
+                    ? skipSeat + 5
+                    : skipSeat;
+
+            BookingModel model = value.get(i);
 
             SeatModel seatModel = new SeatModel();
 
             boolean isBooked = model.getBookMode().equals("Booked");
+
             seatModel.setAvailable(!isBooked);
-            seatModel.setSeatNumber(model.getSeatIdentifier());
             seatModel.setSelected(isBooked);
-            seatModel.setAvailable(!isBooked);
+            seatModel.setSeat(isThisaSeat);
+            seatModel.setSeatIdentifier(model.getSeatIdentifier());
+            seatModel.setFromExistingDataset(true);
+            seatModel.setBackgroundColor(bgCol);
+            seatModel.setBackgroundColor(isBooked
+                    ? Constants.BOOKED_COLOR
+                    : seatModel.getBackgroundColor());
+            seatModel.setVehicleKey(model.getVehicleKey());
+            seatModel.setBookingKey(model.getKey());
+            seatModel.setUserKey(model.getUserKey());
+
             seatModelList.add(seatModel);
         }
 
@@ -153,8 +168,30 @@ public class ThirdFragment extends BasePageFragment {
     private List<SeatModel> prepareSeat(int totalSeat) {
         List<SeatModel> sm = new ArrayList<>();
 
-        for (int i = 1; i <= totalSeat; i++) {
-            sm.add(new SeatModel(String.valueOf(i), true, Color.parseColor("#008577"), false));
+        int skipSeat = 2;
+        for (int i = 0; i <= totalSeat; i++) {
+
+            boolean isDisabled = i != skipSeat;
+            int bgCol = (i == skipSeat && i != 2)
+                    ? Constants.DISABLED_COLOR
+                    : Constants.SEAT_COLOR;
+
+
+            skipSeat = i == skipSeat
+                    ? skipSeat + 5
+                    : skipSeat;
+
+            sm.add(new SeatModel(
+                    bgCol,
+                    isDisabled,
+                    true,
+                    false,
+                    false,
+                    String.valueOf(i),
+                    Constants.EMPTY_STRING,
+                    Constants.EMPTY_STRING,
+                    Constants.EMPTY_STRING,
+                    0));
         }
 
         return sm;
@@ -164,7 +201,9 @@ public class ThirdFragment extends BasePageFragment {
 
         String vehicleKey = bundle.getString(VEHICLE_KEY);
         Log.i("BQ7CH72", "Fetching for vehicle :: " + vehicleKey);
-        viewModel.fetchBooking(vehicleKey);
+        long unixTimestamp = bundle.getLong(BasePageFragment.DATE);
+        Log.i("BQ7CH72", "Fetching for vehicle :: " + unixTimestamp);
+        viewModel.fetchBooking(vehicleKey, unixTimestamp);
     }
 
     private BusSeatAdapter adapter;
@@ -198,14 +237,15 @@ public class ThirdFragment extends BasePageFragment {
         next.setOnClickListener(v -> {
             // nextPage(b)
 
-            viewModel.saveBookings(prepareForSeatInsertion());
-
+            long unixTimestamp = bundle.getLong(BasePageFragment.DATE);
+            viewModel.saveBookings(prepareForSeatInsertion(), unixTimestamp);
         });
     }
 
     private List<BookingModel> prepareForSeatInsertion() {
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
+
         List<SeatModel> seatModelList = adapter.getSeatModelList();
         List<BookingModel> bookingModelList = new ArrayList<>();
 
@@ -216,22 +256,38 @@ public class ThirdFragment extends BasePageFragment {
         long time = System.currentTimeMillis();
 
         String parentNode = sdf.format(date).toUpperCase();
-        for (SeatModel sm
+        for (SeatModel seat
                 : seatModelList) {
 
-            dbRef = dbRef.child(parentNode).push();
-            String key = dbRef.getKey();
+            BookingModel booking = new BookingModel();
 
-            BookingModel bm = new BookingModel();
-            bm.setBookedOn(time);
-            bm.setUserKey(auth.getUid());
-            bm.setVehicleKey(bundle.getString(VEHICLE_KEY));
-            bm.setBookMode(sm.isSelected() ? "Booked" : "Not Booked");
-            bm.setPaymentStatus(sm.isSelected() ? "Paid" : "Unpaid");
-            bm.setSeatIdentifier(sm.getSeatNumber());
-            bm.setKey(key);
+            if (seat.isFromExistingDataset()) { // seat fetched from database
 
-            bookingModelList.add(bm);
+                boolean isSelected = seat.isSelected();
+                // new entry
+
+                booking.setBookedOn(seat.getBookedOn());
+                booking.setUserKey(auth.getUid());
+                booking.setVehicleKey(seat.getVehicleKey());
+                booking.setBookMode(isSelected ? "Booked" : "Not Booked");
+                booking.setPaymentStatus(isSelected ? "Paid" : "Unpaid");
+                booking.setSeatIdentifier(seat.getSeatIdentifier());
+                booking.setKey(seat.getBookingKey());
+            } else { // seat was prepared here
+
+                dbRef = dbRef.child(parentNode).push();
+                String key = dbRef.getKey();
+
+                booking.setBookedOn(time);
+                booking.setUserKey(auth.getUid());
+                booking.setVehicleKey(bundle.getString(VEHICLE_KEY));
+                booking.setBookMode(seat.isSelected() ? "Booked" : "Not Booked");
+                booking.setPaymentStatus(seat.isSelected() ? "Paid" : "Unpaid");
+                booking.setSeatIdentifier(seat.getSeatIdentifier());
+                booking.setKey(key);
+            }
+
+            bookingModelList.add(booking);
         }
 
         return bookingModelList;
