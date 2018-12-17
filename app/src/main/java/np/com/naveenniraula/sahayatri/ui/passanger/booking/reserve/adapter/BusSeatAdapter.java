@@ -51,11 +51,10 @@ public class BusSeatAdapter extends RecyclerView.Adapter<BusSeatAdapter.ViewHold
 
         if (sm.isAvailable() && sm.isSeat()) {
 
+            sm.setSelected(!sm.isSelected());
             int color = sm.isSelected()
                     ? Constants.SELECTED_COLOR
                     : Constants.SEAT_COLOR;
-
-            sm.setSelected(!sm.isSelected());
             seatModelList.set(position, sm);
             sm.setBackgroundColor(color);
 

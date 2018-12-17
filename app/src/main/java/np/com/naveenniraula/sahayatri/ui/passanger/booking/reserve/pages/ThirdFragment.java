@@ -235,11 +235,19 @@ public class ThirdFragment extends BasePageFragment {
         Button next = view.findViewById(R.id.fsNext);
         Bundle b = null;
         next.setOnClickListener(v -> {
+
             // nextPage(b)
 
             long unixTimestamp = bundle.getLong(BasePageFragment.DATE);
             viewModel.saveBookings(prepareForSeatInsertion(), unixTimestamp);
+
+            showPaymentDialog();
+
         });
+    }
+
+    private void showPaymentDialog() {
+
     }
 
     private List<BookingModel> prepareForSeatInsertion() {

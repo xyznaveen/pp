@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    ext{
+    ext {
         APP_NAME = "@string/app_name"
         APP_NAME_DEV = "@string/app_name_development"
     }
@@ -17,10 +17,10 @@ android {
     }
     buildTypes {
         debug {
-            manifestPlaceholders = [ appName: APP_NAME_DEV]
+            manifestPlaceholders = [appName: APP_NAME_DEV]
         }
         release {
-            manifestPlaceholders = [ appName: APP_NAME]
+            manifestPlaceholders = [appName: APP_NAME]
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
