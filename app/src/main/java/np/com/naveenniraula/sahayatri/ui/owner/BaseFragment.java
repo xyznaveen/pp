@@ -27,4 +27,8 @@ public class BaseFragment extends Fragment {
         return null;
     }
 
+    public void changeFragment(Fragment fragment) {
+        getMainActivityInstance().replaceFragment(fragment);
+    }
+
 }

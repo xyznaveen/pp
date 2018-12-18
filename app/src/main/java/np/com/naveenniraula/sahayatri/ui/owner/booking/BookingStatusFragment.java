@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.data.model.Vehicle;
 import np.com.naveenniraula.sahayatri.ui.owner.BaseFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.booking.adapters.BookingStatusAdapter;
+import np.com.naveenniraula.sahayatri.ui.owner.booking.detail.BookingDetailFragment;
 
 public class BookingStatusFragment extends BaseFragment {
 
@@ -83,12 +83,14 @@ public class BookingStatusFragment extends BaseFragment {
     }
 
     private void showProgress() {
+
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         progressBarStatus.setVisibility(View.VISIBLE);
     }
 
     private void hideProgress() {
+
         recyclerView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
         progressBarStatus.setVisibility(View.GONE);
@@ -108,7 +110,9 @@ public class BookingStatusFragment extends BaseFragment {
         });
 
         adapter.setOnBusClickListener(position -> {
-            Toast.makeText(getContext(), "Clicked at :: " + position, Toast.LENGTH_SHORT).show();
+
+            String vehicleKey = adapter.getItemAt(position).getKey();
+            changeFragment(BookingDetailFragment.newInstance(vehicleKey));
         });
     }
 

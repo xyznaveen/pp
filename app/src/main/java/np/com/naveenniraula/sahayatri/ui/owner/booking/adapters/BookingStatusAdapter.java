@@ -47,7 +47,7 @@ public class BookingStatusAdapter extends RecyclerView.Adapter<BookingStatusAdap
 
         ConstraintLayout root;
 
-        public Vh(@NonNull View itemView) {
+        Vh(@NonNull View itemView) {
             super(itemView);
 
             root = itemView.findViewById(R.id.ivRoot);
@@ -77,6 +77,11 @@ public class BookingStatusAdapter extends RecyclerView.Adapter<BookingStatusAdap
 
     public interface OnBusClickListener {
         void onClick(int position);
+    }
+
+    public Vehicle getItemAt(int index) {
+
+        return dataSet.get(index);
     }
 
 }

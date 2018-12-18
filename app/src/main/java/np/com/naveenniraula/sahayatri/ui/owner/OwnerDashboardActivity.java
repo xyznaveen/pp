@@ -121,7 +121,7 @@ public class OwnerDashboardActivity extends AppCompatActivity
         return true;
     }
 
-    private void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
         FragmentManager manager = getSupportFragmentManager();
 
         if (manager != null) {
