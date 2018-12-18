@@ -172,7 +172,7 @@ public class LoginFragment extends BaseFragment
 
         mViewModel.observeAuthenticationChange().observe(this, authenticationResult -> {
 
-            if (!authenticationResult.isAuthStatus()) {
+            if (authenticationResult != null && !authenticationResult.isAuthStatus()) {
 
                 hideProgressBar();
                 enableLoginButton();

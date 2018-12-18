@@ -6,22 +6,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.TextView;
-
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.data.model.Vehicle;
 import np.com.naveenniraula.sahayatri.ui.owner.BaseFragment;
-import np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage.adapter.VehicleAdapter;
+import np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage.adapter.GarageAdapter;
 
 public class GarageFragment extends BaseFragment {
 
@@ -37,7 +32,12 @@ public class GarageFragment extends BaseFragment {
         return inflater.inflate(R.layout.vehicle_detail_fragment, container, false);
     }
 
-    private VehicleAdapter<Vehicle> va;
+    private GarageAdapter garageAdapter;
+
+    private RecyclerView recyclerView;
+    private ProgressBar progressBar;
+    private TextView totalVehicle;
+    private RadioGroup radioGroup;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -45,64 +45,71 @@ public class GarageFragment extends BaseFragment {
 
         changeTitle(R.string.title_garage);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getUid() == null) {
-            return;
-        }
+        garageAdapter = new GarageAdapter();
 
-//        Query query = FirebaseDatabase.getInstance().getReference()
-//                .child("VehicleList").child(auth.getUid()).orderByKey();
-        Query query = FirebaseDatabase.getInstance().getReference()
-                .child("VehicleList")
-                .orderByChild("vehicleOwnerKey")
-                .equalTo(auth.getUid());
+        progressBar = view.findViewById(R.id.vdfProgressBar);
+        radioGroup = view.findViewById(R.id.vdfRadioGroup);
+        totalVehicle = view.findViewById(R.id.vdfVehicleCount);
+        recyclerView = view.findViewById(R.id.vdfVehicles);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(garageAdapter);
 
-        FirebaseRecyclerOptions<Vehicle> options =
-                new FirebaseRecyclerOptions.Builder<Vehicle>()
-                        .setQuery(query, Vehicle.class)
-                        .build();
-        va = new VehicleAdapter<>(options, getContext());
-        RecyclerView rv = view.findViewById(R.id.vdfVehicles);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        rv.setAdapter(va);
-
-        // called after data has been fetched
-        va.setDataFetchCompleteListener(dataCount -> {
-            ProgressBar pb = view.findViewById(R.id.vdfProgressBar);
-            pb.setVisibility(View.GONE);
-
-            TextView totalVehicle = view.findViewById(R.id.vdfVehicleCount);
-            totalVehicle.setText(String.valueOf(dataCount));
-
-            rv.setVisibility(View.VISIBLE);
+        garageAdapter.setOnVehiicleSelectedListener(position -> {
+            Vehicle model = garageAdapter.getItemAt(position);
+            showBottomSheet();
         });
 
-        // user selects an item from the list
-        va.setOptionListener((position, model) -> {
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
 
-            GarageBottomSheetFragment garageBottomSheetFragment = new GarageBottomSheetFragment();
-            garageBottomSheetFragment.show(getActivity().getSupportFragmentManager(), "bottom_sheet");
+            if (checkedId == R.id.vdfRgDay) {
+
+                // call day vehicles
+                mViewModel.fetchVehicles("Day");
+            } else {
+
+                // call night buses
+                mViewModel.fetchVehicles("Night");
+            }
         });
+    }
+
+    private void showBottomSheet() {
+        GarageBottomSheetFragment garageBottomSheetFragment = new GarageBottomSheetFragment();
+        garageBottomSheetFragment.show(getChildFragmentManager(), "bottom_sheet");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(GarageViewModel.class);
-        // TODO: Use the ViewModel
+
+        mViewModel.observeVehicleUpdate().observe(this, vehicles -> {
+
+            if (vehicles == null) {
+                return;
+            }
+
+            totalVehicle.setText(String.valueOf(vehicles.size()));
+            hideProgressBar();
+            garageAdapter.setVehicleList(vehicles);
+        });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    private void showProgressBar() {
 
-        va.startListening();
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+    }
+
+    private void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        va.stopListening();
+        garageAdapter = null;
     }
 }

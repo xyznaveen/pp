@@ -24,6 +24,7 @@ import java.util.List;
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.WelcomeActivity;
 import np.com.naveenniraula.sahayatri.ui.owner.booking.BookingStatusFragment;
+import np.com.naveenniraula.sahayatri.ui.owner.dashboard.OwnerDashboardFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.vehicles.add.AddVehicleFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage.GarageFragment;
 
@@ -52,7 +53,7 @@ public class OwnerDashboardActivity extends AppCompatActivity
 
         changeTitle(R.string.title_vehicle_owner);
 
-        replaceFragment(AddVehicleFragment.newInstance());
+        replaceFragment(GarageFragment.newInstance());
     }
 
     @Override
@@ -114,6 +115,12 @@ public class OwnerDashboardActivity extends AppCompatActivity
             FirebaseAuth.getInstance().signOut();
             this.finish();
             startActivity(new Intent(this, WelcomeActivity.class));
+        } else if (id == R.id.nav_owner_report) {
+
+            replaceFragment(ReportFragment.newInstance());
+        } else if(id == R.id.nav_owner_dashboard) {
+
+            replaceFragment(OwnerDashboardFragment.newInstance());
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

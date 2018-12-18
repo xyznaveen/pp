@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import np.com.naveenniraula.sahayatri.data.local.UserEntity;
+import np.com.naveenniraula.sahayatri.util.PreferenceUtil;
 
 public class LoginViewModel extends ViewModel {
 
@@ -77,11 +78,14 @@ public class LoginViewModel extends ViewModel {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-
-            Log.i("BQ7CH72", "Snapshot :: " + dataSnapshot.getValue(UserEntity.class));
             if (dataSnapshot.getValue() != null) {
 
-                userDetailLiveData.postValue(dataSnapshot.getValue(UserEntity.class));
+                PreferenceUtil util = new PreferenceUtil(null);
+
+                UserEntity userEntity = dataSnapshot.getValue(UserEntity.class);
+                util.saveString("USER_NAME", userEntity.getName());
+                util.saveString("USER_EMAIL", userEntity.getEmail());
+                userDetailLiveData.postValue(userEntity);
                 return;
             }
 
@@ -99,12 +103,8 @@ public class LoginViewModel extends ViewModel {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String userId = firebaseAuth.getUid();
 
-        Log.i("BQ7CH72", "User id ::  " + userId);
-        Log.i("BQ7CH72", "User type ::  " + mutableLiveData.getValue());
+        if (userId == null || firebaseAuth.getUid() == null) {
 
-        if (userId == null) {
-
-            Log.i("BQ7CH72", "User was not authenticated");
             // not authenticated
             userDetailLiveData.postValue(null);
             return;
@@ -113,7 +113,6 @@ public class LoginViewModel extends ViewModel {
         String userType = mutableLiveData.getValue();
         if (userType == null) {
 
-            Log.i("BQ7CH72", "User type is not selected.");
             // user type is, and must be, always defined
             userDetailLiveData.postValue(null);
             return;
@@ -129,7 +128,8 @@ public class LoginViewModel extends ViewModel {
         userType = stringBuilder.toString();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = database.getReference().child(userType).child(firebaseAuth.getUid());
+        DatabaseReference databaseReference = database.getReference()
+                .child(userType).child(firebaseAuth.getUid());
         databaseReference.addListenerForSingleValueEvent(userDetailEventListener);
     }
 

@@ -3,39 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
+    <item
+        android:id="@+id/nav_owner_dashboard"
+        android:icon="@drawable/ic_repairing"
+        android:title="Dashboard" />
+
     <item android:title="Quick Actions">
         <menu>
-            <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_owner_status"
+                android:icon="@drawable/ic_repairing"
+                android:title="My Garage" />
 
-                <item
-                    android:id="@+id/nav_owner_status"
-                    android:icon="@drawable/ic_repairing"
-                    android:title="My Garage" />
+            <item
+                android:id="@+id/nav_owner_report"
+                android:icon="@drawable/ic_analysis"
+                android:title="Reports" />
 
-                <item
-                    android:id="@+id/nav_owner_report"
-                    android:icon="@drawable/ic_analysis"
-                    android:title="Reports" />
-
-                <item
-                    android:id="@+id/nav_owner_tansactions"
-                    android:icon="@drawable/ic_money"
-                    android:title="Transactions" />
-
-            </group>
+            <item
+                android:id="@+id/nav_owner_tansactions"
+                android:icon="@drawable/ic_money"
+                android:title="Transactions" />
         </menu>
     </item>
 
-    <item android:title="Vehicle">
+    <item android:title="Status Monitoring">
         <menu>
             <item
                 android:id="@+id/nav_owner_booking_status"
                 android:icon="@drawable/ic_repairing"
                 android:title="Booking Status" />
-
-            <item
-                android:icon="@drawable/ic_analysis"
-                android:title="Report" />
         </menu>
     </item>
 

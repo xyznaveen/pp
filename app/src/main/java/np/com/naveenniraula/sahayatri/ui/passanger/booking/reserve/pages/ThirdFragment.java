@@ -161,6 +161,7 @@ public class ThirdFragment extends BasePageFragment {
             seatModel.setAvailable(!isBooked);
             seatModel.setSelected(isBooked);
             seatModel.setSeat(isThisaSeat);
+            seatModel.setUserName(model.getUserName());
             seatModel.setSeatIdentifier(model.getSeatIdentifier());
             seatModel.setFromExistingDataset(true);
             seatModel.setBackgroundColor(bgCol);
@@ -295,6 +296,7 @@ public class ThirdFragment extends BasePageFragment {
                 booking.setBookedOn(seat.getBookedOn());
                 booking.setUserKey(auth.getUid());
                 booking.setVehicleKey(seat.getVehicleKey());
+                booking.setUserName(seat.getUserName());
                 booking.setBookMode(isSelected ? "Booked" : "Not Booked");
                 booking.setPaymentStatus(isSelected ? "Paid" : "Unpaid");
                 booking.setSeatIdentifier(seat.getSeatIdentifier());

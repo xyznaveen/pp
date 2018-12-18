@@ -9,6 +9,7 @@ public class SeatModel {
     private boolean isFromExistingDataset; // skip in booking
     private String seatIdentifier;
     private String userKey;
+    private String userName;
     private String vehicleKey;
     private String bookingKey;
     private long bookedOn;
@@ -86,6 +87,14 @@ public class SeatModel {
 
     public void setUserKey(String userKey) {
         this.userKey = userKey;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getVehicleKey() {

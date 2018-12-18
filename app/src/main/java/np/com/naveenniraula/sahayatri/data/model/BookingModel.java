@@ -6,6 +6,7 @@ public class BookingModel {
     private String paymentStatus; // Paid, Unpaid
     private String bookMode; // On Hold, Booked, Not Booked
     private String userKey;
+    private String userName;
     private String vehicleKey;
     private String seatIdentifier;
     private String key;
@@ -54,6 +55,14 @@ public class BookingModel {
 
     public void setUserKey(String userKey) {
         this.userKey = userKey;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getVehicleKey() {

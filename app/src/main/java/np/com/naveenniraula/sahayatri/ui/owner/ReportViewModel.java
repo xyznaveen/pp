@@ -1,8 +1,6 @@
-package np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage;
+package np.com.naveenniraula.sahayatri.ui.owner;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,33 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import np.com.naveenniraula.sahayatri.data.model.Vehicle;
-import np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage.adapter.VehicleAdapter;
 
-public class GarageViewModel extends AndroidViewModel {
+public class ReportViewModel extends ViewModel {
 
-    private MutableLiveData<List<Vehicle>> vehicleListLiveData;
-
-    public GarageViewModel(@NonNull Application application) {
-        super(application);
-    }
-
-    public MutableLiveData<List<Vehicle>> observeVehicleUpdate() {
-
-        if (vehicleListLiveData == null) {
-
-            vehicleListLiveData = new MutableLiveData<>();
-        }
-
-        return vehicleListLiveData;
-    }
-
-    private VehicleAdapter<Vehicle> va;
-
-    public void fetchVehicles(String operationMode) {
+    public void fetchVehicleCount() {
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("VehicleList");
-        dbRef.child(operationMode)
+        dbRef.child("Day")
                 .orderByChild("vehicleOwnerKey")
                 .equalTo(auth.getUid())
                 .addValueEventListener(new ValueEventListener() {
@@ -56,8 +35,6 @@ public class GarageViewModel extends AndroidViewModel {
 
                             vehicles.add(ds.getValue(Vehicle.class));
                         }
-
-                        vehicleListLiveData.postValue(vehicles);
                     }
 
                     @Override
@@ -65,15 +42,7 @@ public class GarageViewModel extends AndroidViewModel {
 
                     }
                 });
-    }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-
-        if (va != null) {
-            va.stopListening();
-        }
     }
 
 }
