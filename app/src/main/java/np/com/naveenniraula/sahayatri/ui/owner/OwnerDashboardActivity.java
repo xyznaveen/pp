@@ -25,6 +25,7 @@ import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.WelcomeActivity;
 import np.com.naveenniraula.sahayatri.ui.owner.booking.BookingStatusFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.dashboard.OwnerDashboardFragment;
+import np.com.naveenniraula.sahayatri.ui.owner.transaction.TransactionFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.vehicles.add.AddVehicleFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage.GarageFragment;
 
@@ -51,9 +52,7 @@ public class OwnerDashboardActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        changeTitle(R.string.title_vehicle_owner);
-
-        replaceFragment(GarageFragment.newInstance());
+        replaceFragment(OwnerDashboardFragment.newInstance());
     }
 
     @Override
@@ -118,9 +117,12 @@ public class OwnerDashboardActivity extends AppCompatActivity
         } else if (id == R.id.nav_owner_report) {
 
             replaceFragment(ReportFragment.newInstance());
-        } else if(id == R.id.nav_owner_dashboard) {
+        } else if (id == R.id.nav_owner_dashboard) {
 
             replaceFragment(OwnerDashboardFragment.newInstance());
+        } else if(id == R.id.nav_owner_tansactions) {
+
+            replaceFragment(TransactionFragment.newInstance());
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -93,6 +93,8 @@ public class GarageFragment extends BaseFragment {
             hideProgressBar();
             garageAdapter.setVehicleList(vehicles);
         });
+
+        radioGroup.check(R.id.vdfRgDay);
     }
 
     private void showProgressBar() {

@@ -1,5 +1,7 @@
 package np.com.naveenniraula.sahayatri.ui.login;
 
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
@@ -15,9 +17,13 @@ import com.google.firebase.database.ValueEventListener;
 import np.com.naveenniraula.sahayatri.data.local.UserEntity;
 import np.com.naveenniraula.sahayatri.util.PreferenceUtil;
 
-public class LoginViewModel extends ViewModel {
+public class LoginViewModel extends AndroidViewModel {
 
     private MutableLiveData<String> mutableLiveData;
+
+    public LoginViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public MutableLiveData<String> getUserType() {
 
@@ -80,7 +86,7 @@ public class LoginViewModel extends ViewModel {
 
             if (dataSnapshot.getValue() != null) {
 
-                PreferenceUtil util = new PreferenceUtil(null);
+                PreferenceUtil util = new PreferenceUtil(getApplication());
 
                 UserEntity userEntity = dataSnapshot.getValue(UserEntity.class);
                 util.saveString("USER_NAME", userEntity.getName());

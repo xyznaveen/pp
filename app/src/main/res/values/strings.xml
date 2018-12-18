@@ -29,7 +29,7 @@
     <string name="error_phone">Are you sure this is your phone number ?</string>
     <string name="error_password">Password must be at least 6 characters.</string>
     <string name="error_name">Looks like this is not your name. example: John Niroula</string>
-    <string name="title_activity_owner_dashboard">OwnerDashboardActivity</string>
+    <string name="title_activity_owner_dashboard">Dashboard</string>
     <string name="msg_invalid_password">Minimum 8 character is required.</string>
     <string name="msg_invalid_email">Valid email address is required.</string>
     <string name="msg_error_required">flexible</string>

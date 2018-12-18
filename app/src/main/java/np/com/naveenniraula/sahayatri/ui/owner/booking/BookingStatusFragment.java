@@ -40,6 +40,7 @@ public class BookingStatusFragment extends BaseFragment {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private TextView progressBarStatus;
+    private RadioGroup radioGroup;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class BookingStatusFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setHasFixedSize(true);
 
-        RadioGroup radioGroup = view.findViewById(R.id.bsfRbGroup);
+        radioGroup = view.findViewById(R.id.bsfRbGroup);
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
 
             showProgress();
@@ -114,6 +115,8 @@ public class BookingStatusFragment extends BaseFragment {
             String vehicleKey = adapter.getItemAt(position).getKey();
             changeFragment(BookingDetailFragment.newInstance(vehicleKey));
         });
+
+        radioGroup.check(R.id.bsfDay);
     }
 
 }

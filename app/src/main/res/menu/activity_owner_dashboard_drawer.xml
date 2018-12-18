@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/nav_owner_dashboard"
-        android:icon="@drawable/ic_repairing"
+        android:icon="@drawable/ic_dashboard"
         android:title="Dashboard" />
 
     <item android:title="Quick Actions">
@@ -31,7 +31,7 @@
         <menu>
             <item
                 android:id="@+id/nav_owner_booking_status"
-                android:icon="@drawable/ic_repairing"
+                android:icon="@drawable/ic_tickets"
                 android:title="Booking Status" />
         </menu>
     </item>

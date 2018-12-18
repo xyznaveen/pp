@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,9 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import np.com.naveenniraula.sahayatri.R;
+import np.com.naveenniraula.sahayatri.ui.owner.BaseFragment;
 
-public class OwnerDashboardFragment extends Fragment {
+public class OwnerDashboardFragment extends BaseFragment {
 
     private OwnerDashboardViewModel mViewModel;
 
@@ -31,6 +31,8 @@ public class OwnerDashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        changeTitle(R.string.title_activity_owner_dashboard);
 
         greetUser();
     }
