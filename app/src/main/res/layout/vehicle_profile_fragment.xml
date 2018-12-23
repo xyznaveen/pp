@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.owner.vehicles.profile.VehicleProfileFragment">
+
+
+    <ImageView
+        android:id="@+id/vpfImage"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_not_verified" />
+
+    <TextView
+        android:id="@+id/vpfVehicleName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="8dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/vpfImage"
+        app:layout_constraintStart_toStartOf="@+id/vpfImage"
+        app:layout_constraintTop_toBottomOf="@+id/vpfImage"
+        tools:text="Makalu Yatayat" />
+
+    <TextView
+        android:id="@+id/vpfRegNum"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/vpfVehicleName"
+        app:layout_constraintStart_toStartOf="@+id/vpfVehicleName"
+        app:layout_constraintTop_toBottomOf="@+id/vpfVehicleName"
+        tools:text="BA 5 KHA 7655" />
+
+    <TextView
+        android:id="@+id/textView43"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Status : "
+        app:layout_constraintStart_toStartOf="@+id/vpfRegNum"
+        app:layout_constraintTop_toBottomOf="@+id/vpfRegNum" />
+
+    <TextView
+        android:id="@+id/textView44"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="In Service"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textView43"
+        app:layout_constraintEnd_toEndOf="@+id/vpfRegNum"
+        app:layout_constraintStart_toEndOf="@+id/textView43" />
+
+</android.support.constraint.ConstraintLayout>

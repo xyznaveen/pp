@@ -17,22 +17,15 @@
                     android:iconTint="@color/colorPrimaryDark"
                     android:title="Profile" />
                 <item
-                    android:icon="@drawable/ic_users"
-                    android:iconTint="@color/colorPrimaryDark"
-                    android:title="Schedules" />
-                <item
+                    android:id="@+id/nav_pass_tickets"
                     android:icon="@drawable/ic_tickets"
                     android:iconTint="@color/colorPrimaryDark"
-                    android:title="e-Ticket" />
-                <item
-                    android:icon="@drawable/ic_history"
-                    android:iconTint="@color/colorPrimaryDark"
-                    android:title="Transaction History" />
+                    android:title="My Bookings" />
                 <item
                     android:id="@+id/nav_pass_new_booking"
                     android:icon="@drawable/ic_history"
                     android:iconTint="@color/colorPrimaryDark"
-                    android:title="Book A Seat" />
+                    android:title="Seat Booking" />
             </menu>
         </item>
     </group>

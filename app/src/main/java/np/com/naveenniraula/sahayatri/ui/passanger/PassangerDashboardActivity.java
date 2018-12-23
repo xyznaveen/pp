@@ -29,10 +29,14 @@ import com.google.firebase.database.ValueEventListener;
 import np.com.naveenniraula.sahayatri.BaseActivity;
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.WelcomeActivity;
+import np.com.naveenniraula.sahayatri.data.local.UserEntity;
+import np.com.naveenniraula.sahayatri.ui.login.LoginFragment;
 import np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.BookVehicleFragment;
 import np.com.naveenniraula.sahayatri.ui.passanger.dashboard.PassangerDashboardFragment;
 import np.com.naveenniraula.sahayatri.ui.passanger.profile.ProfileFragment;
+import np.com.naveenniraula.sahayatri.ui.passanger.tickets.MyTicketsFragment;
 import np.com.naveenniraula.sahayatri.util.MessageHelper;
+import np.com.naveenniraula.sahayatri.util.PreferenceUtil;
 
 public class PassangerDashboardActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,9 +51,9 @@ public class PassangerDashboardActivity extends BaseActivity
         setSupportActionBar(toolbar);
         changeTitle("Passenger");
 
+        mAuth = FirebaseAuth.getInstance();
         testFirebaseQuery();
 
-        mAuth = FirebaseAuth.getInstance();
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             MessageHelper.regularSnack(view, "This message will be shown.");
@@ -101,19 +105,27 @@ public class PassangerDashboardActivity extends BaseActivity
     }
 
     private void testFirebaseQuery() {
+
+        PreferenceUtil preferenceUtil = new PreferenceUtil(this);
+        preferenceUtil.saveString(LoginFragment.USER_TYPE, LoginFragment.PASSANGER);
+
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference ref = db.getReference("vehicles");
-        Query qu = ref.orderByChild("OwnerName")
-                .equalTo("Miteri");
+        DatabaseReference ref = db.getReference();
+        Query qu =
+                ref.child(LoginFragment.PASSANGER)
+                        .orderByChild(mAuth.getUid());
 
         qu.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot ds :
-                        dataSnapshot.getChildren()) {
+                if (dataSnapshot != null) {
 
-                    Log.i("BQ7CH72", "Total children  :: " + ds.getChildrenCount());
+                    for (DataSnapshot ds :
+                            dataSnapshot.getChildren()) {
+
+                        preferenceUtil.saveString(LoginFragment.USER_NAME, ds.getValue(UserEntity.class).getName());
+                    }
                 }
 
             }
@@ -194,6 +206,9 @@ public class PassangerDashboardActivity extends BaseActivity
         } else if (id == R.id.nav_pass_new_booking) {
 
             replaceFragment(BookVehicleFragment.newInstance());
+        } else if (id == R.id.nav_pass_tickets) {
+
+            replaceFragment(MyTicketsFragment.newInstance());
         } else if (id == R.id.nav_action_logout) {
 
             mAuth.signOut();

@@ -41,6 +41,7 @@ public class LoginFragment extends BaseFragment
         implements View.OnClickListener {
 
     public static final String USER_TYPE = "userType";
+    public static final String USER_NAME = "userName";
     private LoginViewModel mViewModel;
     private Button actionVehicleOwner;
     private Button actionPassanger;

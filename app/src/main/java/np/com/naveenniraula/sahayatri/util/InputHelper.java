@@ -64,4 +64,9 @@ public class InputHelper {
 
         return getString(view).toUpperCase();
     }
+
+    public static String removeSpace(String inputString) {
+        return inputString.replaceAll(" ", "");
+    }
+
 }

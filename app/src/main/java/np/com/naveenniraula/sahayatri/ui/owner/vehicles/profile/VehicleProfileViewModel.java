@@ -1,4 +1,4 @@
-package np.com.naveenniraula.sahayatri.ui.passanger.profile;
+package np.com.naveenniraula.sahayatri.ui.owner.vehicles.profile;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -13,30 +13,30 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import np.com.naveenniraula.sahayatri.data.local.UserEntity;
+import np.com.naveenniraula.sahayatri.data.model.Vehicle;
 import np.com.naveenniraula.sahayatri.ui.login.LoginFragment;
 import np.com.naveenniraula.sahayatri.util.InputHelper;
 import np.com.naveenniraula.sahayatri.util.PreferenceUtil;
 
-public class ProfileViewModel extends AndroidViewModel {
+public class VehicleProfileViewModel extends AndroidViewModel {
 
-    private MutableLiveData<UserEntity> userEntityMutableLiveData;
+    private MutableLiveData<Vehicle> vehicleMutableLiveData;
 
-    public ProfileViewModel(@NonNull Application application) {
+    public VehicleProfileViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public MutableLiveData<UserEntity> observeUserData() {
+    public MutableLiveData<Vehicle> observeVehicle() {
 
-        if (userEntityMutableLiveData == null) {
+        if (vehicleMutableLiveData == null) {
 
-            userEntityMutableLiveData = new MutableLiveData<>();
+            vehicleMutableLiveData = new MutableLiveData<>();
         }
 
-        return userEntityMutableLiveData;
+        return vehicleMutableLiveData;
     }
 
-    public void fetchUserDetails() {
+    public void fetchVehicle() {
 
         PreferenceUtil preferenceUtil = new PreferenceUtil(getApplication());
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -52,8 +52,8 @@ public class ProfileViewModel extends AndroidViewModel {
 
                         Log.i("BQ7CH72", "Data snapsoht :: " + dataSnapshot + " path " + databaseReference.getPath());
 
-                        UserEntity userEntity = dataSnapshot.getValue(UserEntity.class);
-                        userEntityMutableLiveData.postValue(userEntity);
+                        Vehicle vehicle = dataSnapshot.getValue(Vehicle.class);
+                        vehicleMutableLiveData.postValue(vehicle);
                     }
 
                     @Override
@@ -61,6 +61,7 @@ public class ProfileViewModel extends AndroidViewModel {
 
                     }
                 });
+
     }
 
 }

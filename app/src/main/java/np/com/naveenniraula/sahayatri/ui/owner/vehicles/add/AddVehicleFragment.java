@@ -22,9 +22,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.data.model.Vehicle;
+import np.com.naveenniraula.sahayatri.ui.login.LoginFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.BaseFragment;
 import np.com.naveenniraula.sahayatri.util.InputHelper;
 import np.com.naveenniraula.sahayatri.util.MessageHelper;
+import np.com.naveenniraula.sahayatri.util.PreferenceUtil;
 import np.com.naveenniraula.sahayatri.util.validation.Rectify;
 
 public class AddVehicleFragment extends BaseFragment {
@@ -59,9 +61,9 @@ public class AddVehicleFragment extends BaseFragment {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        
+
                         Log.i("BQ7CH72", "Databe");
-                        
+
                     }
 
                     @Override
@@ -143,6 +145,9 @@ public class AddVehicleFragment extends BaseFragment {
 
         if (getView() == null) return null;
 
+        PreferenceUtil preferenceUtil = new PreferenceUtil(getView().getContext());
+
+
         Vehicle vehicle = new Vehicle();
         TextInputLayout model = getView().findViewById(R.id.mvfModel);
         TextInputLayout reg = getView().findViewById(R.id.mvfRegistrationNumber);
@@ -160,6 +165,8 @@ public class AddVehicleFragment extends BaseFragment {
                         ? NIGHT_BUS
                         : DAY_BUS
         );
+        vehicle.setOwnerName(preferenceUtil.getString(LoginFragment.USER_NAME));
+
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         vehicle.setVehicleOwnerKey(auth.getUid());

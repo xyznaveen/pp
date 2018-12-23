@@ -14,13 +14,15 @@ public class Vehicle {
     private String vehicleHash;
     private String operationMode;
     private String vehicleOwnerKey;
+    private String ownerName;
 
     public Vehicle() {
     }
 
     public Vehicle(String model, String registrationNumber,
                    int totalSeatCount, int totalCrewCount,
-                   String vehicleHash, String operationMode, String vehicleOwnerKey) {
+                   String vehicleHash, String operationMode, String vehicleOwnerKey,
+                   String ownerName) {
 
         this.model = model;
         this.registrationNumber = registrationNumber;
@@ -29,6 +31,7 @@ public class Vehicle {
         this.vehicleHash = vehicleHash;
         this.operationMode = operationMode;
         this.vehicleOwnerKey = vehicleOwnerKey;
+        this.ownerName = ownerName;
     }
 
     public String getKey() {
@@ -105,5 +108,14 @@ public class Vehicle {
 
     public void setVehicleOwnerKey(String vehicleOwnerKey) {
         this.vehicleOwnerKey = vehicleOwnerKey;
+    }
+
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 }
