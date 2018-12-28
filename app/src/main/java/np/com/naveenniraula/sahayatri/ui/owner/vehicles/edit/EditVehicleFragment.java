@@ -22,14 +22,13 @@ public class EditVehicleFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.edit_vehicle_fragment, container, false);
+        return inflater.inflate(R.layout.my_vehicles_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(EditVehicleViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

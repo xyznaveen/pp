@@ -64,12 +64,24 @@ public class AddVehicleViewModel extends ViewModel {
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
 
-        DatabaseReference currentUserRef = db.getReference()
-                .child("VehicleList")
-                .child(vehicle.getOperationMode()).push();
+        DatabaseReference currentUserRef;
+        if (vehicle.getKey() == null || vehicle.getKey().isEmpty()) {
 
-        // store key along with value because we will need it later
-        vehicle.setKey(currentUserRef.getKey());
+            // user is creating new vehicle
+            currentUserRef = db.getReference()
+                    .child("VehicleList")
+                    .child(vehicle.getOperationMode()).push();
+
+            // store key along with value because we will need it later
+            vehicle.setKey(currentUserRef.getKey());
+        } else {
+
+            // user is trying to update
+            currentUserRef = db.getReference()
+                    .child("VehicleList")
+                    .child(vehicle.getOperationMode())
+                    .child(vehicle.getKey());
+        }
 
         currentUserRef.setValue(vehicle)
                 .addOnCompleteListener(task -> {

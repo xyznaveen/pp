@@ -105,6 +105,20 @@ public class LoginFragment extends BaseFragment
             actionLogin.setEnabled(true);
         });
 
+        TextView passwordReset = view.findViewById(R.id.lfActionReset);
+        passwordReset.setOnClickListener(v -> {
+
+            ResetPasswordDialog resetPasswordDialog = ResetPasswordDialog.newInstance();
+            resetPasswordDialog.setCancelable(false);
+            resetPasswordDialog.show(getChildFragmentManager(), resetPasswordDialog.getTag());
+            resetPasswordDialog.setOnButtonClickedListener(email -> {
+
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email);
+                resetPasswordDialog.dismiss();
+                MessageHelper.regularSnack(this, "Password reset email sent to : " + email);
+            });
+        });
+
         askForPermission();
     }
 

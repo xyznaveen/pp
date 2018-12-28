@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -43,7 +44,7 @@ import np.com.naveenniraula.sahayatri.util.PreferenceUtil;
 public class OwnerDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +90,14 @@ public class OwnerDashboardActivity extends AppCompatActivity
                 for (DataSnapshot ds :
                         dataSnapshot.getChildren()) {
 
+                    TextView email = findViewById(R.id.nhodEmail);
+                    email.setText(ds.getValue(UserEntity.class).getEmail());
+
+                    TextView name = findViewById(R.id.nhodName);
+                    name.setText(ds.getValue(UserEntity.class).getName());
+
                     preferenceUtil.saveString(LoginFragment.USER_NAME, ds.getValue(UserEntity.class).getName());
                 }
-
             }
 
             @Override

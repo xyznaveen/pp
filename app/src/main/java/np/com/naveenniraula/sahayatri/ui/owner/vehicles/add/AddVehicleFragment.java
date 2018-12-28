@@ -36,9 +36,16 @@ public class AddVehicleFragment extends BaseFragment {
     private static final String EMPTY = "";
 
     private AddVehicleViewModel mViewModel;
+    private Vehicle model;
 
     public static AddVehicleFragment newInstance() {
         return new AddVehicleFragment();
+    }
+
+    public static AddVehicleFragment newInstance(Vehicle model) {
+        AddVehicleFragment fragment = new AddVehicleFragment();
+        fragment.model = model;
+        return fragment;
     }
 
     @Override
@@ -52,7 +59,6 @@ public class AddVehicleFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         changeTitle(R.string.title_garage);
-
 
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
         dbRef.child("VehicleList")
@@ -73,6 +79,35 @@ public class AddVehicleFragment extends BaseFragment {
                 });
 
         attachListeners();
+
+        if (model != null) {
+            fillEditData();
+        }
+    }
+
+    private void fillEditData() {
+
+        View view = getView();
+        if (view == null) {
+            return;
+        }
+
+        TextInputLayout model = view.findViewById(R.id.mvfModel);
+        model.getEditText().setText(this.model.getModel());
+
+        TextInputLayout reg = view.findViewById(R.id.mvfRegistrationNumber);
+        reg.getEditText().setText(this.model.getRegistrationNumber());
+
+        TextInputLayout seatCount = view.findViewById(R.id.mvfTotalSeatCount);
+        seatCount.getEditText().setText(String.valueOf(this.model.getTotalSeatCount()));
+
+        TextInputLayout crewCount = view.findViewById(R.id.mvfCrewCount);
+        crewCount.getEditText().setText(String.valueOf(this.model.getTotalCrewCount()));
+
+        RadioGroup busType = view.findViewById(R.id.mvfBustType);
+        boolean isNight = this.model.getOperationMode().equalsIgnoreCase("night");
+
+        busType.check(isNight ? R.id.mvfbtNight : R.id.mvfbtDay);
     }
 
     @Override
@@ -92,7 +127,6 @@ public class AddVehicleFragment extends BaseFragment {
             Button btn = rootView.findViewById(R.id.mvfSaveVehicleInfo);
             btn.setOnClickListener(v -> saveDataToFireBase());
         }
-
     }
 
     private void saveDataToFireBase() {
@@ -167,6 +201,9 @@ public class AddVehicleFragment extends BaseFragment {
         );
         vehicle.setOwnerName(preferenceUtil.getString(LoginFragment.USER_NAME));
 
+        if (this.model != null) {
+            vehicle.setKey(this.model.getKey());
+        }
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         vehicle.setVehicleOwnerKey(auth.getUid());

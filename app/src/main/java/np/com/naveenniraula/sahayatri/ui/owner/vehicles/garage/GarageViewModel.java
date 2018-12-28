@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -76,4 +77,12 @@ public class GarageViewModel extends AndroidViewModel {
         }
     }
 
+    public void deleteBus(Vehicle model) {
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("VehicleList");
+        reference.child(model.getOperationMode())
+                .child(model.getKey()).removeValue((databaseError, databaseReference) -> {
+
+                });
+    }
 }
