@@ -14,23 +14,37 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.WelcomeActivity;
+import np.com.naveenniraula.sahayatri.data.local.UserEntity;
+import np.com.naveenniraula.sahayatri.ui.login.LoginFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.booking.BookingStatusFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.dashboard.OwnerDashboardFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.transaction.TransactionFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.vehicles.add.AddVehicleFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.vehicles.garage.GarageFragment;
+import np.com.naveenniraula.sahayatri.ui.passanger.profile.ProfileFragment;
+import np.com.naveenniraula.sahayatri.util.PreferenceUtil;
 
 public class OwnerDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +52,9 @@ public class OwnerDashboardActivity extends AppCompatActivity
         setContentView(R.layout.activity_owner_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mAuth = FirebaseAuth.getInstance();
+        saveName();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -53,6 +70,41 @@ public class OwnerDashboardActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         replaceFragment(OwnerDashboardFragment.newInstance());
+    }
+
+    private void saveName() {
+
+        PreferenceUtil preferenceUtil = new PreferenceUtil(this);
+        preferenceUtil.saveString(LoginFragment.USER_TYPE, LoginFragment.PASSANGER);
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference ref = db.getReference();
+        Query qu =
+                ref.child(LoginFragment.VEHICLE_OWNER.replaceAll(" ", ""))
+                        .orderByChild(mAuth.getUid());
+
+        qu.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot ds :
+                        dataSnapshot.getChildren()) {
+
+                    TextView email = findViewById(R.id.nhodEmail);
+                    email.setText(ds.getValue(UserEntity.class).getEmail());
+
+                    TextView name = findViewById(R.id.nhodName);
+                    name.setText(ds.getValue(UserEntity.class).getName());
+
+                    preferenceUtil.saveString(LoginFragment.USER_NAME, ds.getValue(UserEntity.class).getName());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.i("BQ7CH72", "Error " + databaseError.getDetails());
+            }
+        });
     }
 
     @Override
@@ -120,9 +172,12 @@ public class OwnerDashboardActivity extends AppCompatActivity
         } else if (id == R.id.nav_owner_dashboard) {
 
             replaceFragment(OwnerDashboardFragment.newInstance());
-        } else if(id == R.id.nav_owner_tansactions) {
+        } else if (id == R.id.nav_owner_tansactions) {
 
             replaceFragment(TransactionFragment.newInstance());
+        } else if (id == R.id.nav_owner_profile) {
+
+            replaceFragment(ProfileFragment.newInstance());
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

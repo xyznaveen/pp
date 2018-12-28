@@ -72,7 +72,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         recreate();
     }
 
-    protected void changeTitle(String title) {
+    public void changeTitle(String title) {
         ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
         actionBar.setTitle(title);
     }

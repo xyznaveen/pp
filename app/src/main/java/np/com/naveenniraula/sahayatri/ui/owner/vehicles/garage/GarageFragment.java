@@ -56,7 +56,7 @@ public class GarageFragment extends BaseFragment {
 
         garageAdapter.setOnVehiicleSelectedListener(position -> {
             Vehicle model = garageAdapter.getItemAt(position);
-            showBottomSheet();
+            showBottomSheet(model);
         });
 
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -73,9 +73,13 @@ public class GarageFragment extends BaseFragment {
         });
     }
 
-    private void showBottomSheet() {
-        GarageBottomSheetFragment garageBottomSheetFragment = new GarageBottomSheetFragment();
+    private void showBottomSheet(Vehicle model) {
+        GarageBottomSheetFragment garageBottomSheetFragment =
+                GarageBottomSheetFragment.newInstance(model);
         garageBottomSheetFragment.show(getChildFragmentManager(), "bottom_sheet");
+        garageBottomSheetFragment.setOnDeleteClickListener(key -> {
+           mViewModel.deleteBus(key);
+        });
     }
 
     @Override

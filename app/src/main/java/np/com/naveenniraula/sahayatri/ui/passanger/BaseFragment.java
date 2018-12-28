@@ -3,6 +3,8 @@ package np.com.naveenniraula.sahayatri.ui.passanger;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 
+import np.com.naveenniraula.sahayatri.R;
+
 public class BaseFragment extends Fragment {
 
     public void changeFragment(Fragment fragment) {
@@ -17,6 +19,11 @@ public class BaseFragment extends Fragment {
         if (activity == null) return;
 
         activity.replaceFragment(fragment);
+    }
+
+    public void changeTitle(String title) {
+
+        ((PassangerDashboardActivity) getActivity()).changeTitle(title);
     }
 
 }

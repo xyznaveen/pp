@@ -32,6 +32,7 @@ public class SecondFragment extends BasePageFragment {
 
     public static final String VEHICLE_KEY = "Vehicle Key";
     private static final String USER_KEY = "User Key";
+    public static final String VEHICLE_NAME = "Vehicle Name";
 
     private Bundle vehiceInfo = new Bundle();
 
@@ -117,6 +118,7 @@ public class SecondFragment extends BasePageFragment {
             vehiceInfo = bookingConfiguration;
             vehiceInfo.putString(VEHICLE_KEY, model.getKey());
             vehiceInfo.putString(USER_KEY, auth.getUid());
+            vehiceInfo.putString(VEHICLE_NAME, model.getOwnerName());
 
             adapter.notifyItemChanged(position);
             enableButton();

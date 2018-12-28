@@ -47,7 +47,7 @@
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:minLines="1"
-                android:text="naveen@gmail.com" />
+                android:text="subtlenv@gmail.com" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -143,13 +143,13 @@
             android:layout_height="1dp"
             android:layout_marginEnd="8dp"
             android:background="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="@+id/textView"
-            app:layout_constraintEnd_toStartOf="@+id/textView"
+            app:layout_constraintBottom_toBottomOf="@+id/nhodEmail"
+            app:layout_constraintEnd_toStartOf="@+id/nhodEmail"
             app:layout_constraintStart_toStartOf="@+id/lfActionLogin"
-            app:layout_constraintTop_toTopOf="@+id/textView" />
+            app:layout_constraintTop_toTopOf="@+id/nhodEmail" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/nhodEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -165,10 +165,10 @@
             android:layout_height="1dp"
             android:layout_marginStart="8dp"
             android:background="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintBottom_toBottomOf="@+id/nhodEmail"
             app:layout_constraintEnd_toEndOf="@+id/lfActionLogin"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="@+id/textView" />
+            app:layout_constraintStart_toEndOf="@+id/nhodEmail"
+            app:layout_constraintTop_toTopOf="@+id/nhodEmail" />
 
         <TextView
             android:id="@+id/lfActionRegister"
@@ -180,7 +180,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/lfActionReset"
             app:layout_constraintStart_toStartOf="@+id/lfActionReset"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/nhodEmail" />
 
         <TextView
             android:id="@+id/textView3"

@@ -10,12 +10,14 @@ public class BookingModel {
     private String vehicleKey;
     private String seatIdentifier;
     private String key;
+    private String ownerName;
 
     public BookingModel() {
     }
 
     public BookingModel(long bookedOn, String paymentStatus, String bookMode,
-                        String userKey, String vehicleKey, String seatIdentifier, String key) {
+                        String userKey, String vehicleKey, String seatIdentifier, String key,
+                        String ownerName) {
         this.bookedOn = bookedOn;
         this.paymentStatus = paymentStatus;
         this.bookMode = bookMode;
@@ -23,6 +25,7 @@ public class BookingModel {
         this.vehicleKey = vehicleKey;
         this.seatIdentifier = seatIdentifier;
         this.key = key;
+        this.ownerName = ownerName;
     }
 
     public long getBookedOn() {
@@ -87,5 +90,13 @@ public class BookingModel {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 }

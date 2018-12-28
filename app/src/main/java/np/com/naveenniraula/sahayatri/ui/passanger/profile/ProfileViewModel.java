@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import np.com.naveenniraula.sahayatri.data.local.UserEntity;
 import np.com.naveenniraula.sahayatri.ui.login.LoginFragment;
+import np.com.naveenniraula.sahayatri.util.InputHelper;
 import np.com.naveenniraula.sahayatri.util.PreferenceUtil;
 
 public class ProfileViewModel extends AndroidViewModel {
@@ -42,7 +43,7 @@ public class ProfileViewModel extends AndroidViewModel {
 
         DatabaseReference databaseReference =
                 FirebaseDatabase.getInstance()
-                        .getReference(preferenceUtil.getString(LoginFragment.USER_TYPE));
+                        .getReference(InputHelper.removeSpace(preferenceUtil.getString(LoginFragment.USER_TYPE)));
 
         databaseReference.child(auth.getUid())
                 .addValueEventListener(new ValueEventListener() {

@@ -41,6 +41,7 @@ public class LoginFragment extends BaseFragment
         implements View.OnClickListener {
 
     public static final String USER_TYPE = "userType";
+    public static final String USER_NAME = "userName";
     private LoginViewModel mViewModel;
     private Button actionVehicleOwner;
     private Button actionPassanger;
@@ -102,6 +103,20 @@ public class LoginFragment extends BaseFragment
             }
 
             actionLogin.setEnabled(true);
+        });
+
+        TextView passwordReset = view.findViewById(R.id.lfActionReset);
+        passwordReset.setOnClickListener(v -> {
+
+            ResetPasswordDialog resetPasswordDialog = ResetPasswordDialog.newInstance();
+            resetPasswordDialog.setCancelable(false);
+            resetPasswordDialog.show(getChildFragmentManager(), resetPasswordDialog.getTag());
+            resetPasswordDialog.setOnButtonClickedListener(email -> {
+
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email);
+                resetPasswordDialog.dismiss();
+                MessageHelper.regularSnack(this, "Password reset email sent to : " + email);
+            });
         });
 
         askForPermission();

@@ -13,13 +13,14 @@ public class SeatModel {
     private String vehicleKey;
     private String bookingKey;
     private long bookedOn;
+    private String ownerName;
 
     public SeatModel() {
     }
 
     public SeatModel(int backgroundColor, boolean isSeat, boolean isAvailable, boolean isSelected,
                      boolean isFromExistingDataset, String seatIdentifier, String userKey,
-                     String vehicleKey, String bookingKey, long bookedOn) {
+                     String vehicleKey, String bookingKey, long bookedOn, String ownerName) {
 
         this.backgroundColor = backgroundColor;
         this.isSeat = isSeat;
@@ -31,6 +32,7 @@ public class SeatModel {
         this.vehicleKey = vehicleKey;
         this.bookingKey = bookingKey;
         this.bookedOn = bookedOn;
+        this.ownerName = ownerName;
     }
 
     public int getBackgroundColor() {
@@ -119,5 +121,13 @@ public class SeatModel {
 
     public void setBookedOn(long bookedOn) {
         this.bookedOn = bookedOn;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 }

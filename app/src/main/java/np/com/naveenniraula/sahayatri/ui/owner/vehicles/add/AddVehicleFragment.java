@@ -22,9 +22,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import np.com.naveenniraula.sahayatri.R;
 import np.com.naveenniraula.sahayatri.data.model.Vehicle;
+import np.com.naveenniraula.sahayatri.ui.login.LoginFragment;
 import np.com.naveenniraula.sahayatri.ui.owner.BaseFragment;
 import np.com.naveenniraula.sahayatri.util.InputHelper;
 import np.com.naveenniraula.sahayatri.util.MessageHelper;
+import np.com.naveenniraula.sahayatri.util.PreferenceUtil;
 import np.com.naveenniraula.sahayatri.util.validation.Rectify;
 
 public class AddVehicleFragment extends BaseFragment {
@@ -34,9 +36,16 @@ public class AddVehicleFragment extends BaseFragment {
     private static final String EMPTY = "";
 
     private AddVehicleViewModel mViewModel;
+    private Vehicle model;
 
     public static AddVehicleFragment newInstance() {
         return new AddVehicleFragment();
+    }
+
+    public static AddVehicleFragment newInstance(Vehicle model) {
+        AddVehicleFragment fragment = new AddVehicleFragment();
+        fragment.model = model;
+        return fragment;
     }
 
     @Override
@@ -51,7 +60,6 @@ public class AddVehicleFragment extends BaseFragment {
 
         changeTitle(R.string.title_garage);
 
-
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
         dbRef.child("VehicleList")
                 .child("Day")
@@ -59,9 +67,9 @@ public class AddVehicleFragment extends BaseFragment {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        
+
                         Log.i("BQ7CH72", "Databe");
-                        
+
                     }
 
                     @Override
@@ -71,6 +79,35 @@ public class AddVehicleFragment extends BaseFragment {
                 });
 
         attachListeners();
+
+        if (model != null) {
+            fillEditData();
+        }
+    }
+
+    private void fillEditData() {
+
+        View view = getView();
+        if (view == null) {
+            return;
+        }
+
+        TextInputLayout model = view.findViewById(R.id.mvfModel);
+        model.getEditText().setText(this.model.getModel());
+
+        TextInputLayout reg = view.findViewById(R.id.mvfRegistrationNumber);
+        reg.getEditText().setText(this.model.getRegistrationNumber());
+
+        TextInputLayout seatCount = view.findViewById(R.id.mvfTotalSeatCount);
+        seatCount.getEditText().setText(String.valueOf(this.model.getTotalSeatCount()));
+
+        TextInputLayout crewCount = view.findViewById(R.id.mvfCrewCount);
+        crewCount.getEditText().setText(String.valueOf(this.model.getTotalCrewCount()));
+
+        RadioGroup busType = view.findViewById(R.id.mvfBustType);
+        boolean isNight = this.model.getOperationMode().equalsIgnoreCase("night");
+
+        busType.check(isNight ? R.id.mvfbtNight : R.id.mvfbtDay);
     }
 
     @Override
@@ -90,7 +127,6 @@ public class AddVehicleFragment extends BaseFragment {
             Button btn = rootView.findViewById(R.id.mvfSaveVehicleInfo);
             btn.setOnClickListener(v -> saveDataToFireBase());
         }
-
     }
 
     private void saveDataToFireBase() {
@@ -143,6 +179,9 @@ public class AddVehicleFragment extends BaseFragment {
 
         if (getView() == null) return null;
 
+        PreferenceUtil preferenceUtil = new PreferenceUtil(getView().getContext());
+
+
         Vehicle vehicle = new Vehicle();
         TextInputLayout model = getView().findViewById(R.id.mvfModel);
         TextInputLayout reg = getView().findViewById(R.id.mvfRegistrationNumber);
@@ -160,6 +199,11 @@ public class AddVehicleFragment extends BaseFragment {
                         ? NIGHT_BUS
                         : DAY_BUS
         );
+        vehicle.setOwnerName(preferenceUtil.getString(LoginFragment.USER_NAME));
+
+        if (this.model != null) {
+            vehicle.setKey(this.model.getKey());
+        }
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         vehicle.setVehicleOwnerKey(auth.getUid());

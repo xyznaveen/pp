@@ -35,6 +35,7 @@ import np.com.naveenniraula.sahayatri.util.Constants;
 import np.com.naveenniraula.sahayatri.util.MessageHelper;
 
 import static np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages.SecondFragment.VEHICLE_KEY;
+import static np.com.naveenniraula.sahayatri.ui.passanger.booking.reserve.pages.SecondFragment.VEHICLE_NAME;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -204,7 +205,8 @@ public class ThirdFragment extends BasePageFragment {
                     Constants.EMPTY_STRING,
                     Constants.EMPTY_STRING,
                     Constants.EMPTY_STRING,
-                    0));
+                    0,
+                    ""));
         }
 
         return sm;
@@ -300,6 +302,7 @@ public class ThirdFragment extends BasePageFragment {
                 booking.setBookMode(isSelected ? "Booked" : "Not Booked");
                 booking.setPaymentStatus(isSelected ? "Paid" : "Unpaid");
                 booking.setSeatIdentifier(seat.getSeatIdentifier());
+                booking.setOwnerName(bundle.getString(VEHICLE_NAME));
                 booking.setKey(seat.getBookingKey());
             } else { // seat was prepared here
 
@@ -312,6 +315,7 @@ public class ThirdFragment extends BasePageFragment {
                 booking.setBookMode(seat.isSelected() ? "Booked" : "Not Booked");
                 booking.setPaymentStatus(seat.isSelected() ? "Paid" : "Unpaid");
                 booking.setSeatIdentifier(seat.getSeatIdentifier());
+                booking.setOwnerName(bundle.getString(VEHICLE_NAME));
                 booking.setKey(key);
             }
 
